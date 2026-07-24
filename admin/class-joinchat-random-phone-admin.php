@@ -377,8 +377,12 @@ class JoinChatRandomPhoneAdmin {
 
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
-		wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . "js/{$this->plugin_name}{$min}.js", array( 'joinchat-admin' ), $this->version, true );
-		wp_register_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . "css/{$this->plugin_name}{$min}.css", array( 'joinchat-admin' ), $this->version, 'all' );
+		// Joinchat 6.x renamed the admin handle from 'joinchat-admin' to 'joinchat'.
+		// Fall back gracefully if an old Joinchat is running.
+		$dep = wp_script_is( 'joinchat', 'registered' ) ? 'joinchat' : 'joinchat-admin';
+
+		wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . "js/{$this->plugin_name}{$min}.js", array( 'jquery', $dep ), $this->version, true );
+		wp_register_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . "css/{$this->plugin_name}{$min}.css", array( $dep ), $this->version, 'all' );
 
 	}
 

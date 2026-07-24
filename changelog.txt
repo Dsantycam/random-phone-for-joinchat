@@ -1,5 +1,12 @@
 == Changelog ==
 
+= 4.0.1 =
+* Arreglado el botón "+" para añadir teléfonos en el panel de administración con
+  Joinchat 6.x: se corrige la dependencia del script (el handle admin pasó de
+  'joinchat-admin' a 'joinchat') y se reescribe el JS para intl-tel-input v25
+  (la antigua API 'intlTelInputGlobals' ya no existe). Los botones +/- ahora se
+  enlazan siempre, aunque intl-tel-input no esté disponible.
+
 = 4.0.0 =
 * Reescritura para Joinchat 6.x (nuevo JavaScript: get_wa_link / open_whatsapp).
 * Reparto GLOBAL y equitativo entre visitantes mediante shuffle-bag en servidor
