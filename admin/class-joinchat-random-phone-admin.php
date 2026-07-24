@@ -129,7 +129,7 @@ class JoinChatRandomPhoneAdmin {
 			$phone  = isset( $settings['telephone'] ) ? $settings['telephone'] : '';
 			$phones = isset( $settings['random_phones'] ) ? $settings['random_phones'] : array();
 
-			$name = strpos( $output, 'data-name' ) !== false ? 'data-name' : 'name';
+			$name = 'name';
 			// Try to disable Chrome autocomplete and autofill phone fields
 			$autocomplete = 'autocomplete="off_' . substr( str_shuffle( md5( mt_rand() ) ), 0, 10 ) . '"';
 
@@ -204,7 +204,7 @@ class JoinChatRandomPhoneAdmin {
 		$phone  = isset( $agent['phone'] ) ? $agent['phone'] : '';
 		$phones = isset( $agent['random_phones'] ) ? $agent['random_phones'] : array();
 
-		$name  = strpos( $output, 'data-name' ) !== false ? 'data-name' : 'name';
+		$name  = 'name';
 		$field = strpos( $output, 'joinchat_agents[list]' ) !== false ? 'joinchat_agents[list]' : 'joinchat[agents]'; // >= 3.0 : < 3.0
 		// Try to disable Chrome autocomplete and autofill phone fields
 		$autocomplete = 'autocomplete="off_' . substr( str_shuffle( md5( mt_rand() ) ), 0, 10 ) . '"';
@@ -275,7 +275,7 @@ class JoinChatRandomPhoneAdmin {
 			isset( $postmeta['random_phones'] ) ? $postmeta['random_phones'] : array()
 		);
 
-		$name = strpos( $output, 'data-name' ) !== false ? 'data-name' : 'name';
+		$name = 'name';
 
 		foreach ( $phones as $key => $value ) {
 			$value    = esc_attr( $value );
@@ -319,7 +319,7 @@ class JoinChatRandomPhoneAdmin {
 			isset( $meta['random_phones'] ) ? $meta['random_phones'] : array()
 		);
 
-		$name = strpos( $output, 'data-name' ) !== false ? 'data-name' : 'name';
+		$name = 'name';
 
 		foreach ( $phones as $key => $value ) {
 			$value    = esc_attr( $value );

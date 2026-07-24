@@ -1,5 +1,12 @@
 == Changelog ==
 
+= 4.0.2 =
+* Arreglado que al añadir un segundo teléfono se borraba el anterior. Los campos
+  del panel ahora son inputs de texto normales con "name" real (se envían
+  siempre), sin depender de intl-tel-input (cuya API cambia entre versiones de
+  Joinchat). Se escribe el número internacional completo, ej. 34600111222.
+* Verificado con pruebas automáticas de DOM (añadir/eliminar conserva valores).
+
 = 4.0.1 =
 * Arreglado el botón "+" para añadir teléfonos en el panel de administración con
   Joinchat 6.x: se corrige la dependencia del script (el handle admin pasó de
