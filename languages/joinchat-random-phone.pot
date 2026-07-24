@@ -1,0 +1,86 @@
+# Copyright (C) 2019 Creame
+# This file is distributed under the same license as the Joinchat Random Phone plugin.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Joinchat Random Phone 2.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/joinchat-random-"
+"phone\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Creame <hola@crea.me>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2022-07-15 16:53+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Domain: joinchat-random-phone\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;esc_html_e;esc_html_x:1,2c;esc_html__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_attr__;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_x:"
+"1,2c;_n:1,2;_n_noop:1,2;__ngettext:1,2;__ngettext_noop:1,2;_c,_nc:4c,1,2\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SearchPath-0: .\n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;"
+
+#: joinchat-random-phone.php:112
+msgid ""
+"<strong>Joinchat Random Phone</strong> require a newer version of <strong>"
+"Joinchat</strong>."
+msgstr ""
+
+#: joinchat-random-phone.php:132
+msgid ""
+"<strong>Joinchat Random Phone</strong> require to update WAme to the new "
+"<strong>Joinchat</strong>."
+msgstr ""
+
+#: admin/class-joinchat-random-phone-admin.php:148
+#: admin/class-joinchat-random-phone-admin.php:225
+#: admin/class-joinchat-random-phone-admin.php:286
+#: admin/class-joinchat-random-phone-admin.php:331
+msgid "Add phone number"
+msgstr ""
+
+#: admin/class-joinchat-random-phone-admin.php:150
+msgid ""
+"Contact phone numbers <strong>(users will contact one of them randomly)"
+"</strong>"
+msgstr ""
+
+#. Author of the plugin
+msgid "Creame"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://crea.me"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://join.chat/en/addons/random-phone/"
+msgstr ""
+
+#. Name of the plugin
+msgid "Joinchat Random Phone"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"Links <strong>Joinchat</strong> to a random phone from a list of phone "
+"numbers."
+msgstr ""
+
+#: joinchat-random-phone.php:113 joinchat-random-phone.php:133
+msgid "Update now"
+msgstr ""
+
+#: admin/class-joinchat-random-phone-admin.php:226
+msgid "User will contact a random one"
+msgstr ""
+
+#: joinchat-random-phone.php:93
+msgid ""
+"You need to install and activate <strong>Joinchat</strong> in order to use "
+"<strong>Joinchat Random Phone</strong>"
+msgstr ""

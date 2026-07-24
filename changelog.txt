@@ -1,0 +1,14 @@
+== Changelog ==
+
+= 4.0.0 =
+* Reescritura para Joinchat 6.x (nuevo JavaScript: get_wa_link / open_whatsapp).
+* Reparto GLOBAL y equitativo entre visitantes mediante shuffle-bag en servidor
+  (compatible con caché de páginas gracias a un endpoint AJAX).
+* Asignación STICKY por visitante: cada visitante siempre cae en el mismo agente.
+* Auto-actualización mediante Plugin Update Checker v5 apuntando a GitHub
+  (sustituye al antiguo actualizador Kernl).
+* Se mantiene la interfaz de administración multi-teléfono con botón "+".
+* Compatibilidad con el addon Agents conservada (shuffle-bag por navegador).
+* La lista completa de teléfonos ya no se expone en el HTML de la página.
+
+Basado en el addon original "Joinchat Random Phone" 3.5.2 de Creame (GPLv3).

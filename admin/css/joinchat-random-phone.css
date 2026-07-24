@@ -1,0 +1,96 @@
+input.joinchat_phone {
+  width: 15em;
+}
+
+br+.iti,
+br+input.joinchat_phone {
+  margin-top: 5px;
+}
+
+.joinchat_phone__add {
+  margin-left: 5px;
+  border-radius: 50%;
+  vertical-align: middle;
+  color: #0085ba;
+  cursor: pointer;
+  opacity: 1 !important;
+}
+
+.joinchat_phone__add:hover,
+.joinchat_phone__add:focus {
+  color: #008ec2;
+}
+
+.joinchat_phone__add:active {
+  color: #0073aa;
+}
+
+.postbox .joinchat_phones {
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 1em 0;
+}
+
+/* Block Editor */
+.edit-post-sidebar .joinchat_phones .iti {
+  max-width: 200px;
+}
+@media (max-width: 782px) {
+  .edit-post-sidebar .joinchat_phones .iti {
+    max-width: none;
+  }
+}
+
+/* on Support Agents */
+
+#joinchat_agents .p {
+  font-size: 14px;
+  margin: 4px 0 0;
+}
+
+#joinchat_agents .joinchat_phones {
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0;
+  display: inline-block;
+  width: calc(100% - 130px);
+  vertical-align: top;
+}
+
+#joinchat_agents .joinchat_phones .joinchat_phone:not([data-intl-tel-input-id]),
+#joinchat_agents .joinchat_phones .iti {
+  max-width: min(200px, calc(100% - 30px));
+}
+
+@media (max-width: 782px) {
+  .form-table td input.joinchat_phone {
+    display: inline-block;
+    width: 14em;
+  }
+
+  .form-table td .iti input[type=text] {
+    width: 100%;
+  }
+
+  .joinchat_phone__add {
+    width: 25px;
+    height: 25px;
+    font-size: 25px;
+  }
+
+  #joinchat_agents .joinchat_phones {
+    width: calc(100% - 130px);
+  }
+
+  #joinchat_agents .joinchat_phones .joinchat_phone:not([data-intl-tel-input-id]) {
+    max-width: min(180px, calc(100% - 34px));
+  }
+
+  #joinchat_agents .form-table td .joinchat_phones input[type=text] {
+    width: 100%;
+  }
+
+  #joinchat_agents .joinchat_phones .description {
+    display: none;
+  }
+}
