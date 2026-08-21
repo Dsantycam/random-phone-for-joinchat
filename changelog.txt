@@ -1,5 +1,27 @@
 == Changelog ==
 
+= 4.1.0 =
+* El cupo se consume por INTENCIÓN DE CONTACTO, no por visita. Antes, cada
+  carga de página gastaba un número de la lista, aunque el visitante no
+  pulsara nunca el botón (y aunque fuera un bot o un rastreador). Ahora el
+  número se pide en la primera señal real de contacto: al apuntar/tocar el
+  botón de WhatsApp, al abrir el chatbox, o al aparecer en pantalla un botón
+  con QR insertado en el contenido.
+* La petición se lanza ANTES de que el clic termine (pointerdown, touchstart,
+  mouseover, evento joinchat:show), así que window.open sigue siendo síncrono
+  dentro del clic y los bloqueadores de ventanas emergentes no intervienen.
+* Los códigos QR se redibujan con el número asignado. Los bloques que tienen
+  su propio número configurado no se tocan. Si algo falla, se conserva el QR
+  ya dibujado: nunca queda un QR roto ni sin dibujar.
+* El visitante que ya tenía número asignado (sticky) lo recupera del navegador
+  al instante, sin pedir nada al servidor y sin gastar cupo.
+* Sin cambios en el reparto: sigue siendo un shuffle-bag global en el servidor
+  (ningún número se repite hasta agotar la lista completa) y la asignación por
+  visitante sigue siendo permanente.
+* Verificado con 38 pruebas automáticas de DOM (jsdom), sobre el archivo normal
+  y sobre el minificado: móvil sin hover, Safari privado sin localStorage,
+  servidor caído, clic instantáneo, QR con número propio y números explícitos.
+
 = 4.0.2 =
 * Arreglado que al añadir un segundo teléfono se borraba el anterior. Los campos
   del panel ahora son inputs de texto normales con "name" real (se envían
