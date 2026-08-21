@@ -338,6 +338,16 @@ class JoinChatRandomPhonePublic {
 
 		global $wpdb;
 
+		// Drop bags whose list no longer exists. The lists map is already capped
+		// at MAX_LISTS, so this keeps the bags from growing forever as the phone
+		// list gets edited over the years.
+		if ( count( $bags ) > self::MAX_LISTS ) {
+			$lists = get_option( self::OPT_LISTS, array() );
+			if ( is_array( $lists ) && ! empty( $lists ) ) {
+				$bags = array_intersect_key( $bags, $lists );
+			}
+		}
+
 		$value = maybe_serialize( $bags );
 
 		$wpdb->query(
@@ -392,10 +402,14 @@ class JoinChatRandomPhonePublic {
 	/**
 	 * Clean a phone number to digits only (drops leading zeros).
 	 *
+	 * Done in two steps on purpose: a single '/^0+|\D/' pass would leave the
+	 * zeros of "+0034600111222" behind, because once the '+' is dropped the
+	 * zeros are no longer at the start of the subject string.
+	 *
 	 * @param string $phone Raw phone.
 	 * @return string
 	 */
 	private function clean_phone( $phone ) {
-		return preg_replace( '/^0+|\D/', '', (string) $phone );
+		return ltrim( preg_replace( '/\D/', '', (string) $phone ), '0' );
 	}
 }

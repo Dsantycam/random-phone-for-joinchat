@@ -34,6 +34,7 @@
   var cfg = window.joinchat_random_phone || {};
 
   var STICKY_KEY = 'joinchat_rp_assigned';
+  var MAX_STICKY = 10;  // Signatures remembered per browser.
 
   // Anything that means "this visitor is heading to WhatsApp".
   var TRIGGERS = '.joinchat__button, .joinchat__open, .joinchat_open, .joinchat_app, ' +
@@ -110,16 +111,55 @@
   };
 
   // ---- Sticky: reuse the phone this browser already has (no slot consumed) ----
+  // Stored as a map { signature: phone } so a site with more than one list
+  // (a page with its own phones) keeps one fixed agent PER list. With a single
+  // shared value, moving between two such pages reassigned the visitor and
+  // burnt a slot on every navigation.
+  function read_sticky() {
+    var raw = store_get(STICKY_KEY);
+    if (!raw) return {};
+
+    try {
+      var data = JSON.parse(raw);
+      if (!data || typeof data !== 'object') return {};
+
+      // Shape used up to 4.1.0: { sig: '...', phone: '...' }.
+      if (data.sig && data.phone) {
+        var old = {};
+        old[data.sig] = data.phone;
+        return old;
+      }
+
+      return data;
+    } catch (e) {
+      return {}; // Corrupt value, ask the server later.
+    }
+  }
+
   function load_sticky() {
     if (!cfg.signature) return;
 
-    var stored = store_get(STICKY_KEY);
-    if (!stored) return;
+    var map = read_sticky();
+    if (typeof map[cfg.signature] === 'string' && map[cfg.signature]) {
+      assigned = map[cfg.signature];
+    }
+  }
 
-    try {
-      var data = JSON.parse(stored);
-      if (data && data.sig === cfg.signature && data.phone) assigned = data.phone;
-    } catch (e) { /* corrupt value, ask the server later */ }
+  function save_sticky(phone) {
+    var map = read_sticky();
+
+    // Re-insert so the most recently used signature is always last.
+    delete map[cfg.signature];
+    map[cfg.signature] = phone;
+
+    var keys = Object.keys(map);
+    if (keys.length > MAX_STICKY) {
+      var trimmed = {};
+      keys.slice(-MAX_STICKY).forEach(function (key) { trimmed[key] = map[key]; });
+      map = trimmed;
+    }
+
+    store_set(STICKY_KEY, JSON.stringify(map));
   }
 
   // ---- Global: pop the next phone from the shared server bag ----
@@ -145,7 +185,7 @@
         asking = false;
         if (res && res.success && res.data && res.data.phone) {
           assigned = res.data.phone;
-          store_set(STICKY_KEY, JSON.stringify({ sig: cfg.signature, phone: assigned }));
+          save_sticky(assigned);
           refresh_qr();
         }
       })

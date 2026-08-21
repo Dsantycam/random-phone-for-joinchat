@@ -18,9 +18,23 @@
 * Sin cambios en el reparto: sigue siendo un shuffle-bag global en el servidor
   (ningún número se repite hasta agotar la lista completa) y la asignación por
   visitante sigue siendo permanente.
-* Verificado con 38 pruebas automáticas de DOM (jsdom), sobre el archivo normal
-  y sobre el minificado: móvil sin hover, Safari privado sin localStorage,
-  servidor caído, clic instantáneo, QR con número propio y números explícitos.
+* Arreglado: un visitante que navegaba entre dos páginas con LISTAS DISTINTAS
+  gastaba un cupo en cada salto y nunca quedaba fijado a un agente. Ahora se
+  recuerda un agente por lista (hasta 10 listas por navegador). Los visitantes
+  que ya tenían número asignado con 4.0.2 lo conservan al actualizar.
+* Arreglado: un número escrito como "+0034600111222" conservaba los ceros
+  ("0034600111222") porque al quitar el "+" los ceros dejaban de estar al
+  principio. Ahora se limpian los símbolos primero y los ceros después.
+* Arreglado: la lista de bolsas de reparto crecía sin límite en la base de
+  datos al editar los teléfonos muchas veces (60 ediciones = 98 KB). Ahora se
+  descartan las bolsas de listas que ya no existen, igual que las listas.
+* Verificado con 132 pruebas automáticas: 74 del PHP (ejecutando la clase real
+  sobre un WordPress simulado) y 58 del DOM con jsdom, estas últimas pasadas
+  también sobre el archivo minificado. Cubren listas de 2, 3, 5, 70, 71, 100,
+  150, 300 y 500 números; cupos repetidos con pesos; 14.000 contactos seguidos;
+  bloqueo de base de datos caído y carreras entre visitantes; bolsa corrupta;
+  firmas inválidas; móvil sin hover; Safari privado sin localStorage; servidor
+  caído; clic instantáneo; y QR con número propio.
 
 = 4.0.2 =
 * Arreglado que al añadir un segundo teléfono se borraba el anterior. Los campos
