@@ -1,96 +1,259 @@
-input.joinchat_phone {
-  width: 15em;
+/**
+ * Random Phone for Joinchat - admin styles
+ */
+
+.jcrp {
+  --jcrp-border: #dcdcde;
+  --jcrp-muted: #646970;
+  --jcrp-accent: #2271b1;
+
+  max-width: 640px;
 }
 
-br+.iti,
-br+input.joinchat_phone {
-  margin-top: 5px;
+/* ---------------------------------------------------------- default country */
+
+.jcrp__country-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  background: #f6f7f7;
+  border: 1px solid var(--jcrp-border);
+  border-radius: 4px;
 }
 
-.joinchat_phone__add {
-  margin-left: 5px;
+.jcrp__country-label {
+  font-weight: 600;
+}
+
+.jcrp__country {
+  max-width: 260px;
+}
+
+.jcrp__country-help {
+  flex: 1 1 100%;
+  color: var(--jcrp-muted);
+  font-size: 12px;
+  font-style: italic;
+}
+
+/* ------------------------------------------------------------------- rows */
+
+.jcrp__rows {
+  border: 1px solid var(--jcrp-border);
+  border-radius: 4px;
+  background: #fff;
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.jcrp__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-bottom: 1px solid #f0f0f1;
+}
+
+.jcrp__row:last-child {
+  border-bottom: 0;
+}
+
+.jcrp__row:hover {
+  background: #f6f7f7;
+}
+
+.jcrp__index {
+  flex: 0 0 2.2em;
+  text-align: right;
+  color: var(--jcrp-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.jcrp__flag {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 15px;
+  border-radius: 2px;
+  background: #f0f0f1;
+}
+
+.jcrp input.jcrp__input {
+  flex: 0 0 12em;
+  width: 12em;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.jcrp__row--bad input.jcrp__input {
+  border-color: #d63638;
+  color: #d63638;
+}
+
+.jcrp__pretty {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--jcrp-muted);
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.jcrp__weight {
+  flex: 0 0 auto;
+  min-width: 2.4em;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: transparent;
+}
+
+.jcrp__row--dup .jcrp__weight {
+  color: #8a5700;
+  background: #fcf3d8;
+  border-radius: 9px;
+  padding: 1px 6px;
+}
+
+.jcrp__del {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
-  vertical-align: middle;
-  color: #0085ba;
+  background: transparent;
+  color: var(--jcrp-muted);
+  font-size: 18px;
+  line-height: 1;
   cursor: pointer;
-  opacity: 1 !important;
 }
 
-.joinchat_phone__add:hover,
-.joinchat_phone__add:focus {
-  color: #008ec2;
+.jcrp__del:hover,
+.jcrp__del:focus {
+  background: #f0b8b8;
+  color: #8c1c1c;
 }
 
-.joinchat_phone__add:active {
-  color: #0073aa;
+/* ---------------------------------------------------------------- actions */
+
+.jcrp__actions {
+  margin: 10px 0 0;
 }
 
-.postbox .joinchat_phones {
+.jcrp__summary {
+  margin: 8px 0 0;
+  color: var(--jcrp-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.jcrp__summary:empty {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ paste */
+
+.jcrp__paste {
+  margin: 10px 0 0;
+  padding: 12px;
+  background: #f6f7f7;
+  border: 1px solid var(--jcrp-border);
+  border-radius: 4px;
+}
+
+.jcrp__paste textarea {
+  width: 100%;
+  font-family: monospace;
+  font-size: 12px;
+}
+
+.jcrp__paste p {
+  margin: 8px 0 0;
+}
+
+.jcrp__paste-replace {
+  margin-left: 10px;
+  color: var(--jcrp-muted);
+  font-size: 12px;
+}
+
+/* ---------------------------------------------------- compact (metabox etc) */
+
+.jcrp--compact {
+  max-width: none;
+}
+
+.jcrp--compact .jcrp__rows {
+  max-height: 260px;
+}
+
+.jcrp--compact .jcrp__row {
+  gap: 6px;
+  padding: 4px 6px;
+}
+
+.jcrp--compact .jcrp__pretty,
+.jcrp--compact .jcrp__index {
+  display: none;
+}
+
+.jcrp--compact input.jcrp__input {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+}
+
+.jcrp__title {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.postbox .jcrp,
+.edit-post-sidebar .jcrp {
   font-size: 13px;
   line-height: 1.5;
   margin: 1em 0;
 }
 
-/* Block Editor */
-.edit-post-sidebar .joinchat_phones .iti {
-  max-width: 200px;
-}
-@media (max-width: 782px) {
-  .edit-post-sidebar .joinchat_phones .iti {
-    max-width: none;
-  }
-}
-
-/* on Support Agents */
+/* --------------------------------------------------------- Support Agents */
 
 #joinchat_agents .p {
   font-size: 14px;
   margin: 4px 0 0;
 }
 
-#joinchat_agents .joinchat_phones {
-  font-size: inherit;
-  line-height: inherit;
-  margin: 0;
+#joinchat_agents .jcrp {
   display: inline-block;
   width: calc(100% - 130px);
   vertical-align: top;
+  margin: 0;
 }
 
-#joinchat_agents .joinchat_phones .joinchat_phone:not([data-intl-tel-input-id]),
-#joinchat_agents .joinchat_phones .iti {
-  max-width: min(200px, calc(100% - 30px));
-}
+/* ---------------------------------------------------------------- mobile */
 
 @media (max-width: 782px) {
-  .form-table td input.joinchat_phone {
-    display: inline-block;
-    width: 14em;
-  }
-
-  .form-table td .iti input[type=text] {
-    width: 100%;
-  }
-
-  .joinchat_phone__add {
-    width: 25px;
-    height: 25px;
-    font-size: 25px;
-  }
-
-  #joinchat_agents .joinchat_phones {
-    width: calc(100% - 130px);
-  }
-
-  #joinchat_agents .joinchat_phones .joinchat_phone:not([data-intl-tel-input-id]) {
-    max-width: min(180px, calc(100% - 34px));
-  }
-
-  #joinchat_agents .form-table td .joinchat_phones input[type=text] {
-    width: 100%;
-  }
-
-  #joinchat_agents .joinchat_phones .description {
+  .jcrp__pretty {
     display: none;
+  }
+
+  .jcrp input.jcrp__input {
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+  }
+
+  .jcrp__country {
+    max-width: none;
+    flex: 1 1 100%;
+  }
+
+  #joinchat_agents .jcrp {
+    width: calc(100% - 130px);
   }
 }

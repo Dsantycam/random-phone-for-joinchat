@@ -3,7 +3,7 @@
  * Plugin Name: Random Phone for Joinchat
  * Plugin URI:  https://github.com/Dsantycam/random-phone-for-joinchat
  * Description: Reparte los contactos de <strong>Joinchat</strong> entre una lista de teléfonos/agentes. Reparto <strong>global y equitativo</strong> entre visitantes (shuffle-bag) con asignación <strong>fija por visitante</strong> (sticky). Compatible con Joinchat 6.x.
- * Version:     4.1.0
+ * Version:     4.2.0
  * Author:      Santiago Camacho
  * Author URI:  https://santiagocamachomkt.com
  * License:     GPLv3
@@ -19,7 +19,7 @@
 
 defined( 'WPINC' ) || exit;
 
-define( 'JOINCHAT_RANDOM_PHONE_VERSION', '4.1.0' );
+define( 'JOINCHAT_RANDOM_PHONE_VERSION', '4.2.0' );
 define( 'JOINCHAT_RANDOM_PHONE_FILE', __FILE__ );
 
 /**
@@ -31,7 +31,88 @@ define( 'JOINCHAT_RANDOM_PHONE_FILE', __FILE__ );
  */
 define( 'JOINCHAT_RANDOM_PHONE_GITHUB', 'https://github.com/Dsantycam/random-phone-for-joinchat/' );
 
+/**
+ * The original Creame addon this one replaces.
+ *
+ * Both register their scripts under the same handle ('joinchat-random-phone'),
+ * so if the two are active WordPress loads only one of them and, by folder
+ * order, the original wins: this plugin's public script would never load and
+ * the split would silently stop working. Hence the notice below.
+ */
+define( 'JOINCHAT_RANDOM_PHONE_OLD', 'joinchat-random-phone/joinchat-random-phone.php' );
+
 add_action( 'plugins_loaded', 'joinchat_random_phone_load_plugin' );
+add_action( 'admin_notices', 'joinchat_random_phone_conflict_notice' );
+add_action( 'admin_post_jcrp_deactivate_old', 'joinchat_random_phone_deactivate_old' );
+
+/**
+ * Is the original Creame Random Phone addon active?
+ *
+ * @since    4.2.0
+ * @return   bool
+ */
+function joinchat_random_phone_old_is_active() {
+
+	if ( ! function_exists( 'is_plugin_active' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/plugin.php';
+	}
+
+	return is_plugin_active( JOINCHAT_RANDOM_PHONE_OLD );
+
+}
+
+/**
+ * Warn when both this plugin and the original addon are active.
+ *
+ * The phone numbers are stored in the very same place by both plugins, so
+ * nothing has to be migrated: deactivating the old one is enough.
+ *
+ * @since    4.2.0
+ * @return   void
+ */
+function joinchat_random_phone_conflict_notice() {
+
+	if ( ! current_user_can( 'activate_plugins' ) || ! joinchat_random_phone_old_is_active() ) {
+		return;
+	}
+
+	$url = wp_nonce_url( admin_url( 'admin-post.php?action=jcrp_deactivate_old' ), 'jcrp_deactivate_old' );
+
+	echo '<div class="notice notice-warning"><p><strong>' .
+		esc_html__( 'Random Phone for Joinchat', 'joinchat-random-phone' ) . '</strong> — ' .
+		esc_html__( 'The original "Joinchat Random Phone" addon is also active. Both use the same script name, so only one of them loads and the phone split can silently stop working.', 'joinchat-random-phone' ) .
+		'</p><p>' .
+		esc_html__( 'Your phone numbers are stored in the same place by both plugins, so nothing is lost: deactivating the old one keeps every number exactly as it is.', 'joinchat-random-phone' ) .
+		'</p><p><a href="' . esc_url( $url ) . '" class="button button-primary">' .
+		esc_html__( 'Deactivate the old addon', 'joinchat-random-phone' ) .
+		'</a></p></div>';
+
+}
+
+/**
+ * Deactivate the original Creame addon.
+ *
+ * @since    4.2.0
+ * @return   void
+ */
+function joinchat_random_phone_deactivate_old() {
+
+	if ( ! current_user_can( 'activate_plugins' ) ) {
+		wp_die( esc_html__( 'You are not allowed to deactivate plugins.', 'joinchat-random-phone' ) );
+	}
+
+	check_admin_referer( 'jcrp_deactivate_old' );
+
+	if ( ! function_exists( 'deactivate_plugins' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/plugin.php';
+	}
+
+	deactivate_plugins( JOINCHAT_RANDOM_PHONE_OLD );
+
+	wp_safe_redirect( wp_get_referer() ? wp_get_referer() : admin_url( 'plugins.php' ) );
+	exit;
+
+}
 
 /**
  * Initialize plugin.

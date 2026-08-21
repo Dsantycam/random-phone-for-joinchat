@@ -1,5 +1,35 @@
 == Changelog ==
 
+= 4.2.0 =
+* Panel de teléfonos rediseñado. Cada fila lleva ahora su banderita (deducida
+  del indicativo que escribes), el número en formato legible al lado
+  (+57 300 1234567), su posición, y un botón para quitarla.
+* Selector de PAÍS POR DEFECTO. Escribes el número nacional (3001234567) y al
+  salir del campo se le añade el indicativo solo (573001234567). Usa
+  libphonenumber para distinguir un número nacional de uno ya completo, así que
+  un número que ya tiene indicativo nunca se toca y el indicativo NUNCA se
+  duplica: ante la duda, se deja lo que escribiste.
+* Botón "Pegar lista": pega los 70 números de golpe, separados por saltos de
+  línea, comas o punto y coma, con opción de reemplazar la lista actual.
+* Resumen del reparto bajo la lista: cuántos cupos, cuántos números distintos y
+  qué porcentaje se lleva el que más recibe. Los números repetidos se marcan
+  con una insignia "×N".
+* Enter añade una fila nueva en vez de guardar el formulario entero.
+* El valor que se GUARDA no ha cambiado: sigue siendo un campo de texto normal
+  con su "name" real y el número internacional en dígitos. Las banderitas, el
+  formato y el selector de país son ayudas visuales; ninguna es dueña del valor,
+  así que un fallo en cualquiera de ellas no puede borrar un teléfono.
+* Detecta el addon original "Joinchat Random Phone" de Creame. Los dos guardan
+  los teléfonos en el mismo sitio, así que no hay nada que migrar: basta con
+  desactivar el viejo, y ahora sale un aviso con un botón para hacerlo.
+* Los scripts pasan a registrarse como "random-phone-for-joinchat". Antes
+  compartían nombre con los del addon original, así que con los dos activos
+  WordPress cargaba solo uno de los dos archivos y el reparto podía dejar de
+  funcionar sin dar ningún error.
+* 84 pruebas automáticas nuevas del panel (64 de comportamiento y 20 de extremo
+  a extremo sobre el HTML que genera el PHP real), pasadas sobre el archivo
+  normal y el minificado.
+
 = 4.1.0 =
 * El cupo se consume por INTENCIÓN DE CONTACTO, no por visita. Antes, cada
   carga de página gastaba un número de la lista, aunque el visitante no

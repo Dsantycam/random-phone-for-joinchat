@@ -29,6 +29,16 @@ defined( 'WPINC' ) || exit;
  */
 class JoinChatRandomPhonePublic {
 
+	/**
+	 * Script handle.
+	 *
+	 * Deliberately different from the asset file name: the original Creame addon
+	 * registers its script as 'joinchat-random-phone', and sharing that handle
+	 * meant that with both plugins active WordPress loaded only one of the two
+	 * files, silently disabling the split.
+	 */
+	const HANDLE = 'random-phone-for-joinchat';
+
 	const AJAX_ACTION = 'joinchat_random_phone';
 	const OPT_LISTS   = 'joinchat_random_phone_lists';
 	const OPT_BAGS    = 'joinchat_random_phone_bags';
@@ -237,7 +247,7 @@ class JoinChatRandomPhonePublic {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		wp_enqueue_script(
-			$this->plugin_name,
+			self::HANDLE,
 			plugin_dir_url( __FILE__ ) . "js/{$this->plugin_name}{$min}.js",
 			array( 'joinchat' ),
 			$this->version,
@@ -245,7 +255,7 @@ class JoinChatRandomPhonePublic {
 		);
 
 		wp_localize_script(
-			$this->plugin_name,
+			self::HANDLE,
 			'joinchat_random_phone',
 			array(
 				'url'       => admin_url( 'admin-ajax.php' ),
