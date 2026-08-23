@@ -1,108 +1,117 @@
-# Copyright (C) 2019 Creame
-# This file is distributed under the same license as the Joinchat Random Phone plugin.
+# Traducción al español de Random Phone for Joinchat.
+# Copyright (C) 2026 Santiago Camacho
+# This file is distributed under the same license as the plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Joinchat Random Phone 2.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/joinchat-random-"
-"phone\n"
-"POT-Creation-Date: 2020-05-01 18:40+0200\n"
-"PO-Revision-Date: 2022-07-15 16:54+0000\n"
-"Last-Translator: Pacotole <pacotole@crea.me>\n"
+"Project-Id-Version: Random Phone for Joinchat 4.2.1\n"
+"Report-Msgid-Bugs-To: https://github.com/Dsantycam/random-phone-for-joinchat/issues\n"
+"POT-Creation-Date: 2026-08-23 00:00+0000\n"
+"PO-Revision-Date: 2026-08-23 00:00+0000\n"
+"Last-Translator: Santiago Camacho <santycamtea@gmail.com>\n"
 "Language-Team: Español\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Loco https://localise.biz/\n"
-"X-Domain: joinchat-random-phone\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;esc_html_e;esc_html_x:1,2c;esc_html__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_attr__;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_x:"
-"1,2c;_n:1,2;_n_noop:1,2;__ngettext:1,2;__ngettext_noop:1,2;_c,_nc:4c,1,2\n"
-"X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-SearchPath-0: .\n"
+"X-Domain: joinchat-random-phone\n"
 
-#: joinchat-random-phone.php:112
-#| msgid ""
-#| "<strong>Joinchat Random Phone</strong> require a newer version of "
-#| "<strong>Joinchat</strong>."
-msgid ""
-"<strong>Joinchat Random Phone</strong> require a newer version of <strong>"
-"Joinchat</strong>."
-msgstr ""
-"<strong>Joinchat Random Phone</strong> requiere una versión más reciente de "
-"<strong>Joinchat</strong>."
+#. Campo de teléfonos: cabecera del selector de país.
+msgid "Default country"
+msgstr "País por defecto"
 
-#: joinchat-random-phone.php:132
-#| msgid ""
-#| "<strong>Joinchat Random Phone</strong> require to update WAme to the new "
-#| "<strong>Joinchat</strong>."
-msgid ""
-"<strong>Joinchat Random Phone</strong> require to update WAme to the new "
-"<strong>Joinchat</strong>."
-msgstr ""
-"<strong>Joinchat Random Phone</strong> requiere una versión más reciente de "
-"<strong>Joinchat</strong>."
+msgid "Added automatically to the numbers you type without a country code."
+msgstr "Se añade solo a los números que escribas sin indicativo."
 
-#: admin/class-joinchat-random-phone-admin.php:148
-#: admin/class-joinchat-random-phone-admin.php:225
-#: admin/class-joinchat-random-phone-admin.php:286
-#: admin/class-joinchat-random-phone-admin.php:331
-msgid "Add phone number"
-msgstr "Añadir número"
+msgid "Add phone"
+msgstr "Añadir teléfono"
 
-#: admin/class-joinchat-random-phone-admin.php:150
-msgid ""
-"Contact phone numbers <strong>(users will contact one of them randomly)"
-"</strong>"
-msgstr ""
-"Números de teléfono de contacto <strong>(los usuarios contactarán con uno de "
-"ellos aleatoriamente)</strong>"
+msgid "Paste list"
+msgstr "Pegar lista"
 
-#. Author of the plugin
-msgid "Creame"
-msgstr "Creame"
+msgid "One phone per line, or separated by commas. Repeat a number to give it more slots."
+msgstr "Un teléfono por línea, o separados por comas. Repite un número para darle más cupos."
 
-#. Author URI of the plugin
-msgid "https://crea.me"
-msgstr "https://crea.me"
+msgid "Add to the list"
+msgstr "Añadir a la lista"
 
-#. URI of the plugin
-msgid "https://join.chat/en/addons/random-phone/"
-msgstr "https://join.chat/en/addons/random-phone/"
+msgid "Cancel"
+msgstr "Cancelar"
 
-#. Name of the plugin
-#| msgid "Joinchat Random Phone"
-msgid "Joinchat Random Phone"
-msgstr "Joinchat Random Phone"
+msgid "Replace the current list"
+msgstr "Reemplazar la lista actual"
 
-#. Description of the plugin
-#| msgid ""
-#| "Links <strong>Joinchat</strong> to a random phone from a list of phone "
-#| "numbers."
-msgid ""
-"Links <strong>Joinchat</strong> to a random phone from a list of phone "
-"numbers."
-msgstr ""
-"Enlaza <strong>Joinchat</strong> a un teléfono aleatorio de una lista de "
-"números de teléfono."
+msgid "Remove this phone"
+msgstr "Quitar este teléfono"
 
-#: joinchat-random-phone.php:113 joinchat-random-phone.php:133
+msgid "Contact phone numbers <strong>(users will contact one of them randomly)</strong>"
+msgstr "Teléfonos de contacto <strong>(cada visitante escribirá a uno de ellos)</strong>"
+
+msgid "Repeat a number to give it more slots. The first one is the default and is also used for the QR code."
+msgstr "Repite un número para darle más cupos. El primero es el predeterminado y es el que se usa para el código QR."
+
+msgid "User will contact a random one"
+msgstr "El usuario escribirá a uno al azar"
+
+msgid "Telephone"
+msgstr "Teléfono"
+
+#. Resumen del reparto, bajo la lista de teléfonos.
+msgid "slot"
+msgstr "cupo"
+
+msgid "slots"
+msgstr "cupos"
+
+msgid "number"
+msgstr "número"
+
+msgid "numbers"
+msgstr "números"
+
+#. %1$s: cupos del que más recibe. %2$s: porcentaje.
+msgid "the most loaded gets %1$s slots (%2$s%%)"
+msgstr "el que más recibe se lleva %1$s cupos (%2$s%%)"
+
+#. %s: porcentaje que recibe cada número.
+msgid "even split, %s%% each"
+msgstr "reparto parejo, %s%% cada uno"
+
+#. %1$s: veces repetido. %2$s: cupos totales. %3$s: porcentaje.
+msgid "This number is repeated %1$s times: it takes %1$s of the %2$s slots (%3$s%%)"
+msgstr "Este número está repetido %1$s veces: se lleva %1$s de los %2$s cupos (%3$s%%)"
+
+msgid "— none —"
+msgstr "— ninguno —"
+
+#. Avisos del plugin.
+msgid "Random Phone for Joinchat"
+msgstr "Random Phone for Joinchat"
+
+msgid "The original \"Joinchat Random Phone\" addon is also active. Both use the same script name, so only one of them loads and the phone split can silently stop working."
+msgstr "El addon original «Joinchat Random Phone» también está activo. Los dos usan el mismo nombre de script, así que solo se carga uno de ellos y el reparto de teléfonos puede dejar de funcionar sin avisar."
+
+msgid "Your phone numbers are stored in the same place by both plugins, so nothing is lost: deactivating the old one keeps every number exactly as it is."
+msgstr "Los dos plugins guardan los teléfonos en el mismo sitio, así que no se pierde nada: al desactivar el viejo, todos los números se quedan tal cual están."
+
+msgid "Deactivate the old addon"
+msgstr "Desactivar el addon viejo"
+
+msgid "You are not allowed to deactivate plugins."
+msgstr "No tienes permisos para desactivar plugins."
+
+msgid "You need to install and activate <strong>Joinchat</strong> in order to use <strong>Joinchat Random Phone</strong>"
+msgstr "Necesitas instalar y activar <strong>Joinchat</strong> para poder usar <strong>Random Phone for Joinchat</strong>"
+
+msgid "<strong>Joinchat Random Phone</strong> require a newer version of <strong>Joinchat</strong>."
+msgstr "<strong>Random Phone for Joinchat</strong> necesita una versión más reciente de <strong>Joinchat</strong>."
+
+msgid "<strong>Joinchat Random Phone</strong> require to update WAme to the new <strong>Joinchat</strong>."
+msgstr "<strong>Random Phone for Joinchat</strong> necesita que actualices WAme al nuevo <strong>Joinchat</strong>."
+
 msgid "Update now"
 msgstr "Actualizar ahora"
 
-#: admin/class-joinchat-random-phone-admin.php:226
-msgid "User will contact a random one"
-msgstr "El usuario contactará con uno aleatorio"
-
-#: joinchat-random-phone.php:93
-#| msgid ""
-#| "You need to install and activate <strong>Joinchat</strong> in order to "
-#| "use <strong>Joinchat Random Phone</strong>"
-msgid ""
-"You need to install and activate <strong>Joinchat</strong> in order to use "
-"<strong>Joinchat Random Phone</strong>"
-msgstr ""
-"Debes instalar y activar <strong>Joinchat</strong> para poder usar <strong>"
-"Joinchat Random Phone</strong>"
+#. Cadena antigua, conservada por compatibilidad.
+msgid "Add phone number"
+msgstr "Añadir teléfono"

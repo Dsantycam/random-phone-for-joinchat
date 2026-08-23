@@ -3,7 +3,7 @@
  * Plugin Name: Random Phone for Joinchat
  * Plugin URI:  https://github.com/Dsantycam/random-phone-for-joinchat
  * Description: Reparte los contactos de <strong>Joinchat</strong> entre una lista de teléfonos/agentes. Reparto <strong>global y equitativo</strong> entre visitantes (shuffle-bag) con asignación <strong>fija por visitante</strong> (sticky). Compatible con Joinchat 6.x.
- * Version:     4.2.0
+ * Version:     4.2.1
  * Author:      Santiago Camacho
  * Author URI:  https://santiagocamachomkt.com
  * License:     GPLv3
@@ -19,7 +19,7 @@
 
 defined( 'WPINC' ) || exit;
 
-define( 'JOINCHAT_RANDOM_PHONE_VERSION', '4.2.0' );
+define( 'JOINCHAT_RANDOM_PHONE_VERSION', '4.2.1' );
 define( 'JOINCHAT_RANDOM_PHONE_FILE', __FILE__ );
 
 /**

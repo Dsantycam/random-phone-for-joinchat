@@ -1,5 +1,21 @@
 == Changelog ==
 
+= 4.2.1 =
+* Arregladas las banderas, que no se veían. El CSS del plugin usaba la forma
+  abreviada "background", que borra la imagen del sprite de banderas, y además
+  forzaba un tamaño de 20x15 px cuando las celdas del sprite son de 16x12. Se
+  pasa a "background-color" solo en el hueco vacío y se respeta el tamaño real.
+* El plugin ya está en español. La traducción venía del addon original de 2019
+  y no incluía ninguna de las cadenas nuevas, así que el panel salía en inglés.
+  Añadidas y traducidas las 31 cadenas del plugin.
+* La insignia "×N" de los números repetidos ahora explica lo que significa al
+  pasar el ratón por encima: cuántos cupos se lleva ese número, sobre cuántos
+  y qué porcentaje representa.
+* Pruebas nuevas: 15 de traducciones (validan el archivo .mo con un lector
+  independiente y comprueban que ninguna cadena del código se quede en inglés
+  ni rompa los marcadores de formato) y 11 que impiden que el fallo del CSS de
+  las banderas pueda volver.
+
 = 4.2.0 =
 * Panel de teléfonos rediseñado. Cada fila lleva ahora su banderita (deducida
   del indicativo que escribes), el número en formato legible al lado

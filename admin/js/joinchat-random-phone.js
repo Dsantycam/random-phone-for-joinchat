@@ -36,6 +36,7 @@
     most: 'the most loaded gets %1$s slots (%2$s%)',
     even: 'even split, %s% each',
     remove: 'Remove this phone',
+    weight_tip: 'This number is repeated %1$s times: it takes %1$s of the %2$s slots (%3$s%)',
     no_country: '— none —',
   }, window.jcrp_l10n || {});
 
@@ -174,7 +175,14 @@
       $row.find('.jcrp__pretty').text(num ? pretty(num) : '');
 
       var weight = counts[num] || 0;
-      $row.find('.jcrp__weight').text(weight > 1 ? '×' + weight : '');
+      $row.find('.jcrp__weight')
+        .text(weight > 1 ? '×' + weight : '')
+        .attr('title', weight > 1
+          ? L.weight_tip
+            .replace('%1$s', weight)
+            .replace('%2$s', total)
+            .replace('%3$s', (weight * 100 / total).toFixed(1))
+          : '');
       $row.toggleClass('jcrp__row--dup', weight > 1);
       $row.toggleClass('jcrp__row--bad', !!num && !is_international(num));
     });

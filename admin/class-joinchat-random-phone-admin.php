@@ -466,6 +466,8 @@ class JoinChatRandomPhoneAdmin {
 				/* translators: %s: percentage. */
 				'even'       => __( 'even split, %s%% each', 'joinchat-random-phone' ),
 				'remove'     => __( 'Remove this phone', 'joinchat-random-phone' ),
+				/* translators: %1$s: times repeated, %2$s: total slots, %3$s: percentage. */
+				'weight_tip' => __( 'This number is repeated %1$s times: it takes %1$s of the %2$s slots (%3$s%%)', 'joinchat-random-phone' ),
 				'no_country' => __( '— none —', 'joinchat-random-phone' ),
 			)
 		);

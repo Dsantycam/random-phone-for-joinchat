@@ -73,12 +73,27 @@
   font-variant-numeric: tabular-nums;
 }
 
+/*
+ * The flag itself is intl-tel-input's sprite (class "iti__flag iti__xx", added
+ * by the JS). Two things must be respected here or the flag goes blank:
+ *
+ *  - Never use the `background` shorthand: this sheet loads after
+ *    intlTelInput.css with the same specificity, so a shorthand would reset
+ *    background-image and wipe the sprite. Only background-color, and only on
+ *    the empty state.
+ *  - Keep the sprite's own cell size (16x12 by default): background-size is
+ *    calculated for it, so any other size crops or misaligns the image.
+ */
 .jcrp__flag {
   flex: 0 0 auto;
-  width: 20px;
-  height: 15px;
+  width: var(--iti-flag-width, 16px);
+  height: var(--iti-flag-height, 12px);
   border-radius: 2px;
-  background: #f0f0f1;
+}
+
+.jcrp__flag:not(.iti__flag) {
+  background-color: #f0f0f1;
+  box-shadow: inset 0 0 0 1px #e0e0e1;
 }
 
 .jcrp input.jcrp__input {
