@@ -185,7 +185,10 @@ class JoinChatRandomPhonePublic {
 			$this->list       = $list;
 			$this->signature  = substr( md5( wp_json_encode( $list ) ), 0, 16 );
 
-			// telephone stays as the first valid phone (default / fallback / QR).
+			// telephone stays as the first valid phone. It is the fallback: what
+			// the server reports, what is painted before the visitor's own number
+			// arrives, and what is used if the assignment never arrives. Once the
+			// number is assigned the front end (including the QR) uses that one.
 			$settings['telephone'] = $list[0];
 
 			// Persist the list so the AJAX endpoint can (re)build the bag.

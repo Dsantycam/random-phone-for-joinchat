@@ -45,11 +45,67 @@
   var countries = [];       // [{iso2, dialCode, name, priority}]
   var by_dial = [];         // Same, sorted by dial code length (longest first).
 
-  // ---------------------------------------------------------------- helpers --
+  // --------------------------------------------------- intl-tel-input shims --
+  //
+  // Joinchat ships intl-tel-input and bumps it between releases, renaming public
+  // API on the way: Joinchat 6.2.x carries v25, Joinchat 6.3.x carries v29, and
+  // v29 dropped getCountryData(), utils.isPossibleNumber() and utils.numberFormat.
+  // Everything below resolves the name at runtime and falls back, so the field
+  // keeps working on both and simply loses the extras on anything unknown.
+
+  function country_source() {
+    if (!iti) return null;
+    if (typeof iti.getAllCountries === 'function') return iti.getAllCountries.bind( iti );  // v29+
+    if (typeof iti.getCountryData === 'function') return iti.getCountryData.bind( iti );    // v25
+    return null;
+  }
+
+  function number_formats() {
+    return (iti && iti.NUMBER_FORMAT) || (utils && utils.numberFormat) || {};
+  }
+
+  // v25 answers directly; v29 only through the validation error code.
+  function possible_national(num, iso2) {
+    if (!utils || !num || !iso2) return false;
+
+    try {
+      if (typeof utils.isPossibleNumber === 'function') {
+        return !!utils.isPossibleNumber(num, iso2.toUpperCase());
+      }
+
+      if (typeof utils.getValidationError === 'function') {
+        var codes = (iti && iti.VALIDATION_ERROR) || utils.validationError || {};
+        if (!('IS_POSSIBLE' in codes)) return false;
+        return utils.getValidationError(num, iso2.toUpperCase()) === codes.IS_POSSIBLE;
+      }
+    } catch (e) { /* fall through */ }
+
+    return false;
+  }
+
+  // Country names: Joinchat's own translations, then the browser's, then English.
+  var display_names = null;
+  try {
+    if (window.Intl && Intl.DisplayNames) {
+      display_names = new Intl.DisplayNames(
+        [document.documentElement.lang || navigator.language || 'en'],
+        { type: 'region' }
+      );
+    }
+  } catch (e) { display_names = null; }
 
   function l10n(key, fallback) {
     var t = window.intl_tel_l10n;
-    return (t && typeof t[key] === 'string' && t[key]) || fallback;
+    if (t && typeof t[key] === 'string' && t[key]) return t[key];
+
+    if (display_names) {
+      try {
+        var name = display_names.of(key.toUpperCase());
+        if (name && name.toLowerCase() !== key.toLowerCase()) return name;
+      } catch (e) { /* fall through */ }
+    }
+
+    return fallback || key.toUpperCase();
   }
 
   function digits(value) {
@@ -57,10 +113,11 @@
   }
 
   function load_countries() {
-    if (!iti || typeof iti.getCountryData !== 'function') return;
+    var source = country_source();
+    if (!source) return;
 
     try {
-      countries = (iti.getCountryData() || []).map(function (c) {
+      countries = (source() || []).map(function (c) {
         return {
           iso2: c.iso2,
           dialCode: String(c.dialCode || ''),
@@ -98,30 +155,30 @@
   }
 
   // Is this already a complete international number?
+  //
+  // Asked as "which country does this dial code belong to, and is the rest a
+  // valid number there". Passing the whole thing with no country worked on v25
+  // but always answers no on v29.
   function is_international(num) {
     if (!utils) return true; // Without libphonenumber, never touch what is typed.
-    try {
-      return !!utils.isPossibleNumber('+' + num, null);
-    } catch (e) {
-      return true;
-    }
+
+    var country = country_of(num);
+    if (!country) return false;
+
+    return possible_national(num.slice(country.dialCode.length), country.iso2);
   }
 
   // Is this a valid national number for that country?
   function is_national(num, iso2) {
-    if (!utils || !iso2) return false;
-    try {
-      return !!utils.isPossibleNumber(num, iso2.toUpperCase());
-    } catch (e) {
-      return false;
-    }
+    return possible_national(num, iso2);
   }
 
   function pretty(num) {
     var country = country_of(num);
-    if (!utils || !country) return '';
+    if (!utils || !country || typeof utils.formatNumber !== 'function') return '';
+
     try {
-      return utils.formatNumber('+' + num, country.iso2.toUpperCase(), utils.numberFormat.INTERNATIONAL) || '';
+      return utils.formatNumber('+' + num, country.iso2.toUpperCase(), number_formats().INTERNATIONAL) || '';
     } catch (e) {
       return '';
     }

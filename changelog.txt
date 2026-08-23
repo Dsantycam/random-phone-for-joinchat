@@ -1,5 +1,19 @@
 == Changelog ==
 
+= 4.2.2 =
+* Compatible con Joinchat 6.3.x. Esa versión trae intl-tel-input v29, que
+  renombró la API que usa el panel: desaparecieron getCountryData(),
+  utils.isPossibleNumber() y utils.numberFormat. El panel se quedaba sin datos
+  de países, así que no salían las banderas ni el selector de país. Ahora se
+  resuelve el nombre de cada función en tiempo de ejecución y funciona igual
+  con la v25 (Joinchat 6.2.x) y con la v29 (Joinchat 6.3.x).
+* Los nombres de los países salen ahora del propio navegador cuando Joinchat no
+  los aporta, que es lo que ocurre en la v29.
+* Verificado en producción sobre Joinchat 6.3.2: 60 teléfonos, todas las
+  banderas dibujadas y todos los números formateados.
+* 10 pruebas nuevas que emulan la API de la v29 sobre el motor real, incluida
+  la comprobación de que el indicativo tampoco se duplica en esa versión.
+
 = 4.2.1 =
 * Arregladas las banderas, que no se veían. El CSS del plugin usaba la forma
   abreviada "background", que borra la imagen del sprite de banderas, y además

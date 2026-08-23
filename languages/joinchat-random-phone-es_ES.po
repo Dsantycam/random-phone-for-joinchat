@@ -47,8 +47,8 @@ msgstr "Quitar este teléfono"
 msgid "Contact phone numbers <strong>(users will contact one of them randomly)</strong>"
 msgstr "Teléfonos de contacto <strong>(cada visitante escribirá a uno de ellos)</strong>"
 
-msgid "Repeat a number to give it more slots. The first one is the default and is also used for the QR code."
-msgstr "Repite un número para darle más cupos. El primero es el predeterminado y es el que se usa para el código QR."
+msgid "Repeat a number to give it more slots. The first one is only the fallback: it is used when the server cannot assign one in time."
+msgstr "Repite un número para darle más cupos. El primero es solo el respaldo: se usa cuando el servidor no alcanza a asignar uno a tiempo."
 
 msgid "User will contact a random one"
 msgstr "El usuario escribirá a uno al azar"

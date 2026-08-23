@@ -243,7 +243,7 @@ class JoinChatRandomPhoneAdmin {
 				$phones,
 				array(
 					'description' => __( 'Contact phone numbers <strong>(users will contact one of them randomly)</strong>', 'joinchat-random-phone' ) .
-						'<br>' . __( 'Repeat a number to give it more slots. The first one is the default and is also used for the QR code.', 'joinchat-random-phone' ),
+						'<br>' . __( 'Repeat a number to give it more slots. The first one is only the fallback: it is used when the server cannot assign one in time.', 'joinchat-random-phone' ),
 				)
 			);
 
