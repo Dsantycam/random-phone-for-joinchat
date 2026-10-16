@@ -3,7 +3,7 @@
  * Plugin Name: Random Phone for Joinchat
  * Plugin URI:  https://github.com/Dsantycam/random-phone-for-joinchat
  * Description: Reparte los contactos de <strong>Joinchat</strong> entre una lista de teléfonos/agentes. Reparto <strong>global y equitativo</strong> entre visitantes (shuffle-bag) con asignación <strong>fija por visitante</strong> (sticky). Compatible con Joinchat 6.x.
- * Version:     4.2.2
+ * Version:     4.3.0
  * Author:      Santiago Camacho
  * Author URI:  https://santiagocamachomkt.com
  * License:     GPLv3
@@ -19,7 +19,7 @@
 
 defined( 'WPINC' ) || exit;
 
-define( 'JOINCHAT_RANDOM_PHONE_VERSION', '4.2.2' );
+define( 'JOINCHAT_RANDOM_PHONE_VERSION', '4.3.0' );
 define( 'JOINCHAT_RANDOM_PHONE_FILE', __FILE__ );
 
 /**
@@ -151,6 +151,10 @@ function joinchat_random_phone_load_plugin() {
 
 		require plugin_dir_path( __FILE__ ) . 'admin/class-joinchat-random-phone-admin.php';
 		require plugin_dir_path( __FILE__ ) . 'public/class-joinchat-random-phone-public.php';
+		require plugin_dir_path( __FILE__ ) . 'includes/class-joinchat-random-phone-roles.php';
+
+		// Let the admin choose which roles can manage Joinchat.
+		new JoinChatRandomPhoneRoles();
 
 		if ( is_admin() ) {
 			new JoinChatRandomPhoneAdmin( $plugin_name, JOINCHAT_RANDOM_PHONE_VERSION );

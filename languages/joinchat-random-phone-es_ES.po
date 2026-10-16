@@ -115,3 +115,9 @@ msgstr "Actualizar ahora"
 #. Cadena antigua, conservada por compatibilidad.
 msgid "Add phone number"
 msgstr "Añadir teléfono"
+
+msgid "Joinchat permissions"
+msgstr "Permisos de Joinchat"
+
+msgid "Choose which roles, besides administrators, can view and change the Joinchat settings."
+msgstr "Elige qué roles, además de los administradores, pueden ver y cambiar los ajustes de Joinchat."

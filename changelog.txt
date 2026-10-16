@@ -1,5 +1,11 @@
 == Changelog ==
 
+= 4.3.0 =
+* Nueva página Ajustes > Permisos de Joinchat: el administrador elige qué roles
+  (por ejemplo, Editor) pueden ver y cambiar los ajustes de Joinchat. Los
+  administradores siempre tienen acceso. No se modifican los roles en la base
+  de datos: al desactivar el plugin vuelve el comportamiento por defecto.
+
 = 4.2.2 =
 * Compatible con Joinchat 6.3.x. Esa versión trae intl-tel-input v29, que
   renombró la API que usa el panel: desaparecieron getCountryData(),
