@@ -1,5 +1,93 @@
 == Changelog ==
 
+= 4.5.0 =
+* Nuevo panel "Reparto de contactos" (en el menú de Joinchat, o en Ajustes si
+  Joinchat está ahí): visitantes asignados y aperturas de WhatsApp por teléfono
+  y por día, tasa de contacto, equilibrio del reparto frente a lo que
+  corresponde a cada número por sus cupos, ronda actual de la bolsa, origen
+  (botón flotante, ventana de chat, botones y enlaces, apertura automática),
+  móvil/escritorio y páginas con más contactos. Periodos de hoy, 7, 30 y 90
+  días, 12 meses o fechas a elegir, comparación con el periodo anterior,
+  tabla ordenable y exportación a CSV (lista para Excel).
+* Aviso cuando el servidor no responde a muchos visitantes y el número lo
+  tiene que elegir el navegador (caché, cortafuegos o plugin de seguridad
+  bloqueando admin-ajax.php).
+* Las estadísticas son contadores diarios en una tabla propia (wp_jcrp_stats),
+  sumados con una sola consulta atómica: nada sobre los visitantes. Se crea al
+  activar o, al actualizar, con la primera visita; si no se puede crear, el
+  reparto sigue igual y se reintenta cada hora. Se borra al desinstalar.
+* Nunca afectan al reparto: cualquier fallo al contar se ignora, y el aviso
+  de apertura sale después de abrir WhatsApp (sendBeacon) sin retrasarlo.
+  Solo se cuentan teléfonos de la lista y se descartan robots.
+* Filtro joinchat_random_phone_stats para apagarlas.
+
+= 4.4.0 =
+* Compatible con todas las versiones de Joinchat, desde la 3.0 (cuando aún se
+  llamaba "WAme") hasta la 6.4.4. Antes exigía la 6.0. Probado con el código
+  real de 20 versiones: 3.0.0, 3.0.3, 3.1.0, 3.1.4, 3.2.0, 3.2.3, 4.0.10, 4.1.15,
+  4.2.0, 4.3.2, 4.4.3, 4.5.20, 5.0.17, 5.1.8, 5.2.4, 6.0.10, 6.1.3, 6.2.3,
+  6.3.2 y 6.4.4.
+* Nueva capa de compatibilidad (includes/class-joinchat-random-phone-compat.php)
+  que resuelve lo que cambia entre versiones: el prefijo de hooks, opción y
+  metadatos (whatsappme_ en la 3.x, joinchat_ después), los nombres de los
+  scripts y estilos de cada versión, y si existe el filtro de permisos.
+* Web: el reparto funciona con el objeto wame_public (3.x) y joinchat_obj
+  (4.x+), con whatsapp_link (3.2-5.x) y get_wa_link (6.x), y escucha también
+  los eventos jQuery de Joinchat 3.x-5.x (whatsappme:open, joinchat:open,
+  joinchat:show), que no llegan a los escuchadores nativos. En WAme 3.0/3.1,
+  que construye el enlace en una función privada, el número se corrige en el
+  evento whatsappme:open. Los QR de Joinchat 4.4-5.x (jQuery, kjua) también.
+* Panel de teléfonos: banderas, nombres de país, formato y prefijo automático
+  con intl-tel-input v16 (3.x/4.0), v17 (4.1-4.5), v18 (5.x), v25 (6.0-6.2) y
+  v29 (6.3+). En v16-v18 la librería de validación (libphonenumber) se carga
+  aparte y Joinchat solo lo hacía para su propio campo, que este panel
+  sustituye: ahora la carga el plugin desde el mismo sitio que Joinchat.
+* Las dependencias del panel se calculan con los scripts que existen en cada
+  versión: una dependencia inexistente hacía que WordPress no cargara el panel.
+* Cajas de entrada, categoría (4.3+) y autor (nuevo, Joinchat 6.4+): si el
+  marcado no es el esperado se sustituye solo el campo, y si no se encuentra
+  se deja el de Joinchat (antes daba avisos de PHP y rompía la caja).
+* Arreglado: una categoría o un autor con su propio teléfono se seguía
+  repartiendo entre la lista del sitio (solo se comprobaba en las entradas).
+* La página de permisos por rol solo se activa con Joinchat 4.2+, que es
+  cuando apareció el filtro que necesita.
+* Nuevos bancos de pruebas: test-versiones.js (reparto en la web con las 20
+  versiones, 124 pruebas), test-admin-versiones.js (panel con las 20, 200
+  pruebas) y test-compat.php (lado PHP por versión, 33 pruebas cada una).
+
+= 4.3.1 =
+* Arreglado: casi todos los contactos llegaban al primer número. Joinchat abre
+  WhatsApp en el mismo clic, y el número del visitante se pedía al servidor al
+  tocar el botón; en móvil entre el toque y el clic pasan ~100 ms y la
+  respuesta tarda bastante más, así que se abría el número por defecto. Además
+  el cupo se gastaba igual en otro agente, que nunca recibía ese contacto.
+  Ahora, si al abrir WhatsApp el número aún no ha llegado, se pide en ese mismo
+  clic (petición síncrona), sin que el navegador bloquee la ventana.
+* Cada navegador envía un identificador y el servidor recuerda durante un día
+  qué número le dio: la petición del toque y la del clic reciben el mismo
+  número y solo se gasta un cupo.
+* Arreglado: en las páginas donde Joinchat carga su versión "lite" (botones o
+  enlaces de WhatsApp sin la burbuja flotante) el plugin no se cargaba y todo
+  iba al primer número. Ahora se carga con las dos versiones, y si Joinchat se
+  encola tarde se reintenta en el pie de página.
+* A prueba de fallos: si el servidor no responde (bloqueo de admin-ajax,
+  firewall, error 500, página en caché con una lista antigua...) el número se
+  elige al azar de la lista en el navegador, nunca siempre el primero.
+* Funciona aunque un plugin de optimización (WP Rocket, LiteSpeed, Autoptimize)
+  cambie el orden de los scripts, y aunque otro script reemplace las funciones
+  de Joinchat: como última red, el evento oficial "joinchat:open" corrige el
+  enlace justo antes de abrir WhatsApp.
+* admin-ajax se llama siempre en el mismo dominio que ve el visitante (www/sin
+  www, http/https ya no lo bloquean) y la respuesta se entiende aunque otro
+  plugin imprima avisos PHP delante.
+* Un botón con su propio número ya no gasta cupo del reparto. El número por
+  defecto escrito con otro formato (+57 300...) también se reparte.
+* El servidor reconstruye una lista perdida a partir de los ajustes actuales, y
+  una opción corrupta en la base de datos ya no provoca un error fatal en la
+  página.
+* Nuevo banco de pruebas de integración (test-integracion.js) que ejecuta el
+  JS real de Joinchat 6.2.3 (lite y completo): 38 pruebas. PHP: 92 pruebas.
+
 = 4.3.0 =
 * Nueva página Ajustes > Permisos de Joinchat: el administrador elige qué roles
   (por ejemplo, Editor) pueden ver y cambiar los ajustes de Joinchat. Los

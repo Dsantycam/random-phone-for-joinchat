@@ -40,55 +40,123 @@
     no_country: '— none —',
   }, window.jcrp_l10n || {});
 
-  var iti = window.intlTelInput;
-  var utils = iti && iti.utils;
   var countries = [];       // [{iso2, dialCode, name, priority}]
   var by_dial = [];         // Same, sorted by dial code length (longest first).
 
   // --------------------------------------------------- intl-tel-input shims --
   //
   // Joinchat ships intl-tel-input and bumps it between releases, renaming public
-  // API on the way: Joinchat 6.2.x carries v25, Joinchat 6.3.x carries v29, and
-  // v29 dropped getCountryData(), utils.isPossibleNumber() and utils.numberFormat.
-  // Everything below resolves the name at runtime and falls back, so the field
-  // keeps working on both and simply loses the extras on anything unknown.
+  // API on the way:
+  //
+  //   WAme 3.x / Joinchat 4.0   v16 (from cdnjs)  \  intlTelInputGlobals.getCountryData()
+  //   Joinchat 4.1 - 4.5        v17               |  utils = window.intlTelInputUtils,
+  //   Joinchat 5.x              v18               /  loaded apart (utilsScript)
+  //   Joinchat 6.0 - 6.2        v25   intlTelInput.getCountryData(), utils bundled
+  //   Joinchat 6.3 - 6.4        v29   getAllCountries(); dropped isPossibleNumber()
+  //                                   and utils.numberFormat
+  //
+  // Everything below resolves the name at runtime (the library may even load
+  // after this script) and falls back, so the field keeps working everywhere
+  // and simply loses the extras (flags, formatting) on anything unknown.
+
+  function iti() {
+    return window.intlTelInput || null;
+  }
+
+  function globals() {
+    return window.intlTelInputGlobals || null;
+  }
+
+  function utils() {
+    var i = iti();
+    return (i && i.utils) || window.intlTelInputUtils || null;
+  }
 
   function country_source() {
-    if (!iti) return null;
-    if (typeof iti.getAllCountries === 'function') return iti.getAllCountries.bind( iti );  // v29+
-    if (typeof iti.getCountryData === 'function') return iti.getCountryData.bind( iti );    // v25
+    var i = iti();
+    var g = globals();
+    if (i && typeof i.getAllCountries === 'function') return i.getAllCountries.bind(i);  // v29+
+    if (i && typeof i.getCountryData === 'function') return i.getCountryData.bind(i);    // v25
+    if (g && typeof g.getCountryData === 'function') return g.getCountryData.bind(g);    // v16-v18
     return null;
   }
 
   function number_formats() {
-    return (iti && iti.NUMBER_FORMAT) || (utils && utils.numberFormat) || {};
+    var i = iti();
+    var u = utils();
+    return (i && i.NUMBER_FORMAT) || (u && u.numberFormat) || {};
   }
 
-  // v25 answers directly; v29 only through the validation error code.
+  // v18 / v25 answer directly; v16-v17 and v29 through the validation error code.
   function possible_national(num, iso2) {
-    if (!utils || !num || !iso2) return false;
+    var u = utils();
+    if (!u || !num || !iso2) return false;
 
     try {
-      if (typeof utils.isPossibleNumber === 'function') {
-        return !!utils.isPossibleNumber(num, iso2.toUpperCase());
+      if (typeof u.isPossibleNumber === 'function') {
+        return !!u.isPossibleNumber(num, iso2.toUpperCase());
       }
 
-      if (typeof utils.getValidationError === 'function') {
-        var codes = (iti && iti.VALIDATION_ERROR) || utils.validationError || {};
+      if (typeof u.getValidationError === 'function') {
+        var i = iti();
+        var codes = (i && i.VALIDATION_ERROR) || u.validationError || {};
         if (!('IS_POSSIBLE' in codes)) return false;
-        return utils.getValidationError(num, iso2.toUpperCase()) === codes.IS_POSSIBLE;
+        return u.getValidationError(num, iso2.toUpperCase()) === codes.IS_POSSIBLE;
       }
     } catch (e) { /* fall through */ }
 
     return false;
   }
 
-  // Country names: Joinchat's own translations, then the browser's, then English.
+  // v16-v18 keep libphonenumber in a separate file that Joinchat only loads
+  // when it initializes its own phone input, which this field replaces. Load it
+  // from the same place Joinchat would: intlTelConf.utils_js (4.1-5.x) or
+  // cdnjs with the version Joinchat declares (WAme 3.x / 4.0).
+  function utils_url() {
+    if (window.intlTelConf && window.intlTelConf.utils_js) return window.intlTelConf.utils_js;
+    var v = window.intl_tel_input_version;
+    if (typeof v === 'string' && /^\d+\.\d+\.\d+$/.test(v)) {
+      return 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/' + v + '/js/utils.js';
+    }
+    return '';
+  }
+
+  function ensure_utils(done) {
+    if (utils()) return;
+
+    var url = utils_url();
+    if (!url) return;
+
+    try {
+      var g = globals();
+      if (g && typeof g.loadUtils === 'function') {
+        g.loadUtils(url);
+      } else {
+        var s = document.createElement('script');
+        s.src = url;
+        s.async = true;
+        document.head.appendChild(s);
+      }
+    } catch (e) { return; }
+
+    // Repaint once it is there (formatted numbers, validity marks).
+    var tries = 0;
+    var timer = setInterval(function () {
+      if (utils() || ++tries > 60) {
+        clearInterval(timer);
+        if (utils()) done();
+      }
+    }, 250);
+  }
+
+  // Country names: Joinchat's own translations, then the browser's (in the
+  // admin language Joinchat 6.3+ declares), then English.
   var display_names = null;
   try {
     if (window.Intl && Intl.DisplayNames) {
+      var iti_l10n = window.joinchat_iti_l10n || {};
       display_names = new Intl.DisplayNames(
-        [document.documentElement.lang || navigator.language || 'en'],
+        [iti_l10n.countryNameLocale || document.documentElement.lang || navigator.language || 'en'],
         { type: 'region' }
       );
     }
@@ -160,7 +228,7 @@
   // valid number there". Passing the whole thing with no country worked on v25
   // but always answers no on v29.
   function is_international(num) {
-    if (!utils) return true; // Without libphonenumber, never touch what is typed.
+    if (!utils()) return true; // Without libphonenumber, never touch what is typed.
 
     var country = country_of(num);
     if (!country) return false;
@@ -175,10 +243,11 @@
 
   function pretty(num) {
     var country = country_of(num);
-    if (!utils || !country || typeof utils.formatNumber !== 'function') return '';
+    var u = utils();
+    if (!u || !country || typeof u.formatNumber !== 'function') return '';
 
     try {
-      return utils.formatNumber('+' + num, country.iso2.toUpperCase(), number_formats().INTERNATIONAL) || '';
+      return u.formatNumber('+' + num, country.iso2.toUpperCase(), number_formats().INTERNATIONAL) || '';
     } catch (e) {
       return '';
     }
@@ -390,6 +459,11 @@
     load_countries();
 
     $('.jcrp').each(function () { init($(this)); });
+
+    // intl-tel-input v16-v18: libphonenumber arrives later.
+    ensure_utils(function () {
+      $('.jcrp').each(function () { refresh($(this)); });
+    });
 
     // Joinchat repaints parts of the admin (agents, block editor sidebar).
     $(document).on('joinchat:agents:added joinchat:refresh', function () {

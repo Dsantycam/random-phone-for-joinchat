@@ -56,12 +56,16 @@ class JoinChatRandomPhoneAdmin {
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
 
-		add_action( 'joinchat_run_pre', array( $this, 'init' ) );
+		add_action( JoinChatRandomPhoneCompat::hook( 'run_pre' ), array( $this, 'init' ) );
 
 	}
 
 	/**
 	 * Initialize all hooks
+	 *
+	 * The same hooks exist from WAme 3.x to Joinchat 6.x, only the prefix changes
+	 * ('whatsappme_' in 3.x). Hooks a version doesn't have simply never fire
+	 * (term metabox since 4.3, author metabox since 6.4).
 	 *
 	 * @since    2.0.0
 	 * @param    array $joinchat       JoinChat object.
@@ -70,17 +74,20 @@ class JoinChatRandomPhoneAdmin {
 	public function init( $joinchat ) {
 
 		$loader = $joinchat->get_loader();
+		$c      = 'JoinChatRandomPhoneCompat';
 
-		$loader->add_filter( 'joinchat_extra_settings', $this, 'extra_settings' );
-		$loader->add_filter( 'option_joinchat', $this, 'fix_phones' );
-		$loader->add_filter( 'joinchat_field_output', $this, 'fields_output', 10, 3 );
-		$loader->add_filter( 'joinchat_settings_validate', $this, 'settings_validate', 11 );
+		$loader->add_filter( $c::hook( 'extra_settings' ), $this, 'extra_settings' );
+		$loader->add_filter( 'option_' . $c::option(), $this, 'fix_phones' );
+		$loader->add_filter( $c::hook( 'field_output' ), $this, 'fields_output', 10, 3 );
+		$loader->add_filter( $c::hook( 'settings_validate' ), $this, 'settings_validate', 11 );
 		$loader->add_filter( 'joinchat_agents_settings_validate', $this, 'agents_settings_validate' );
-		$loader->add_filter( 'joinchat_metabox_output', $this, 'metabox_output', 10, 2 );
-		$loader->add_filter( 'joinchat_term_metabox_output', $this, 'term_metabox_output', 10, 2 );
-		$loader->add_filter( 'joinchat_metabox_save', $this, 'metabox_save' );
+		$loader->add_filter( $c::hook( 'metabox_output' ), $this, 'metabox_output', 10, 2 );
+		$loader->add_filter( $c::hook( 'term_metabox_output' ), $this, 'term_metabox_output', 10, 2 );
+		$loader->add_filter( $c::hook( 'user_metabox_output' ), $this, 'user_metabox_output', 10, 2 );
+		$loader->add_filter( $c::hook( 'metabox_save' ), $this, 'metabox_save' );
 
-		$loader->add_action( 'admin_enqueue_scripts', $this, 'register_assets' );
+		// After Joinchat registered its own assets (we depend on them).
+		$loader->add_action( 'admin_enqueue_scripts', $this, 'register_assets', 20 );
 
 		// Support Agents addon compatible
 		$loader->add_filter( 'joinchat_agent_phone', $this, 'agent_phones', 10, 3 );
@@ -112,7 +119,7 @@ class JoinChatRandomPhoneAdmin {
 	 */
 	public function fix_phones( $option ) {
 
-		if ( strpos( $option['telephone'], ',' ) !== false ) {
+		if ( is_array( $option ) && isset( $option['telephone'] ) && is_string( $option['telephone'] ) && strpos( $option['telephone'], ',' ) !== false ) {
 			$phones                  = explode( ',', $option['telephone'] );
 			$phones                  = array_map( 'trim', $phones );
 			$option['telephone']     = array_shift( $phones );
@@ -239,7 +246,7 @@ class JoinChatRandomPhoneAdmin {
 			);
 
 			$output = $this->render_phones(
-				'joinchat[telephone][%d]',
+				JoinChatRandomPhoneCompat::option() . '[telephone][%d]',
 				$phones,
 				array(
 					'description' => __( 'Contact phone numbers <strong>(users will contact one of them randomly)</strong>', 'joinchat-random-phone' ) .
@@ -351,58 +358,115 @@ class JoinChatRandomPhoneAdmin {
 	 */
 	public function metabox_output( $output, $post ) {
 
-		// Enqueue assets
-		wp_enqueue_script( $this->handle );
-		wp_enqueue_style( $this->handle );
+		$p = JoinChatRandomPhoneCompat::prefix();
 
-		$postmeta = get_post_meta( $post->ID, '_joinchat', true ) ?: array();
-
-		$phones = array_merge(
-			array( isset( $postmeta['telephone'] ) ? $postmeta['telephone'] : '' ),
-			isset( $postmeta['random_phones'] ) && is_array( $postmeta['random_phones'] ) ? $postmeta['random_phones'] : array()
-		);
-
+		$phones  = $this->meta_phones( is_object( $post ) ? get_post_meta( $post->ID, JoinChatRandomPhoneCompat::meta_key(), true ) : array() );
 		$replace = '<label class="jcrp__title">' . __( 'Telephone', 'creame-whatsapp-me' ) . '</label>' .
-			$this->render_phones( 'joinchat_telephone[%d]', $phones, array( 'compact' => true ) );
+			$this->render_phones( $p . '_telephone[%d]', $phones, array( 'compact' => true ) );
 
-		// Replace phone input
-		preg_match( '/<p>\s*<label for="joinchat_phone">/m', $output, $matches, PREG_OFFSET_CAPTURE );
-		$from   = $matches[0][1];
-		$length = strpos( $output, '</p>', $from ) + strlen( '</p>' ) - $from;
-		$output = substr_replace( $output, $replace, $from, $length );
+		// The whole "<p><label for=..._phone>...<input ...></p>" block. Same in
+		// every version from WAme 3.0.3 to Joinchat 6.4.
+		if ( preg_match( '/<p>\s*<label for="' . $p . '_phone">/', $output, $m, PREG_OFFSET_CAPTURE ) ) {
+			$from = $m[0][1];
+			$end  = strpos( $output, '</p>', $from );
+			if ( false !== $end ) {
+				return $this->enqueue_and( substr_replace( $output, $replace, $from, $end + 4 - $from ) );
+			}
+		}
 
-		return $output;
+		// Unknown markup: replace only the input (or keep Joinchat's own field).
+		return $this->replace_input( $output, $p, $replace );
 
 	}
 
-
 	/**
-	 * Random Phone term edit form phone field
+	 * Random Phone term edit form phone field (Joinchat 4.3+)
 	 *
 	 * @since    3.4.0
 	 * @param    string  $output       metabox output.
-	 * @param    WP_Term $term         Current post object.
+	 * @param    WP_Term $term         Current term object.
 	 * @return   string
 	 */
 	public function term_metabox_output( $output, $term ) {
 
-		// Enqueue assets
-		wp_enqueue_script( $this->handle );
-		wp_enqueue_style( $this->handle );
+		$meta = is_object( $term ) && function_exists( 'get_term_meta' ) ? get_term_meta( $term->term_id, JoinChatRandomPhoneCompat::meta_key(), true ) : array();
 
-		$meta = get_term_meta( $term->term_id, '_joinchat', true ) ?: array();
+		return $this->replace_input(
+			$output,
+			JoinChatRandomPhoneCompat::prefix(),
+			$this->render_phones( JoinChatRandomPhoneCompat::prefix() . '_telephone[%d]', $this->meta_phones( $meta ), array( 'compact' => true ) )
+		);
 
-		$phones = array_merge(
-			array( isset( $meta['telephone'] ) ? $meta['telephone'] : '' ),
+	}
+
+	/**
+	 * Random Phone author profile phone field (Joinchat 6.4+)
+	 *
+	 * @since    4.4.0
+	 * @param    string  $output       metabox output.
+	 * @param    WP_User $user         Current user object.
+	 * @return   string
+	 */
+	public function user_metabox_output( $output, $user ) {
+
+		$meta = is_object( $user ) ? get_user_meta( $user->ID, JoinChatRandomPhoneCompat::meta_key(), true ) : array();
+
+		return $this->replace_input(
+			$output,
+			JoinChatRandomPhoneCompat::prefix(),
+			$this->render_phones( JoinChatRandomPhoneCompat::prefix() . '_telephone[%d]', $this->meta_phones( $meta ), array( 'compact' => true ) )
+		);
+
+	}
+
+	/**
+	 * Phone list saved in a post/term/user meta.
+	 *
+	 * @param    mixed $meta  Saved meta.
+	 * @return   array
+	 */
+	private function meta_phones( $meta ) {
+
+		$meta = is_array( $meta ) ? $meta : array();
+
+		return array_merge(
+			array( isset( $meta['telephone'] ) && is_scalar( $meta['telephone'] ) ? (string) $meta['telephone'] : '' ),
 			isset( $meta['random_phones'] ) && is_array( $meta['random_phones'] ) ? $meta['random_phones'] : array()
 		);
 
-		$replace = $this->render_phones( 'joinchat_telephone[%d]', $phones, array( 'compact' => true ) );
+	}
 
-		// Replace phone input
-		$from   = strpos( $output, '<input id="joinchat_phone"' );
-		$length = strpos( $output, '</td>', $from ) - $from;
-		$output = substr_replace( $output, $replace, $from, $length );
+	/**
+	 * Replace Joinchat's single phone <input id="{prefix}_phone"> with our field.
+	 *
+	 * If the input can't be found the output is returned untouched: Joinchat's
+	 * own field keeps working (one phone), nothing breaks.
+	 *
+	 * @param    string $output   Metabox output.
+	 * @param    string $p        Prefix.
+	 * @param    string $replace  Our field.
+	 * @return   string
+	 */
+	private function replace_input( $output, $p, $replace ) {
+
+		if ( ! is_string( $output ) || ! preg_match( '/<input\b[^>]*\bid="' . $p . '_phone"[^>]*>/', $output, $m, PREG_OFFSET_CAPTURE ) ) {
+			return $output;
+		}
+
+		return $this->enqueue_and( substr_replace( $output, $replace, $m[0][1], strlen( $m[0][0] ) ) );
+
+	}
+
+	/**
+	 * Enqueue our assets and return the given output.
+	 *
+	 * @param    string $output  Output.
+	 * @return   string
+	 */
+	private function enqueue_and( $output ) {
+
+		wp_enqueue_script( $this->handle );
+		wp_enqueue_style( $this->handle );
 
 		return $output;
 
@@ -446,12 +510,17 @@ class JoinChatRandomPhoneAdmin {
 
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
-		// Joinchat 6.x renamed the admin handle from 'joinchat-admin' to 'joinchat'.
-		// Fall back gracefully if an old Joinchat is running.
-		$dep = wp_script_is( 'joinchat', 'registered' ) ? 'joinchat' : 'joinchat-admin';
+		// Depend only on handles that exist in this Joinchat version: a missing
+		// dependency makes WordPress silently skip our script. Admin handle:
+		// 'whatsappme-admin' (3.x), 'joinchat-admin' (4.x-5.x), 'joinchat' (6.x).
+		// intl-tel-input (flags, formats): 'intl-tel-input' or 'joinchat-iti'
+		// (6.3+); loading it first lets the field use it on every screen.
+		$c           = 'JoinChatRandomPhoneCompat';
+		$script_deps = array_merge( array( 'jquery' ), $c::registered( $c::iti_handles() ), $c::registered( $c::admin_handles() ) );
+		$style_deps  = array_merge( $c::registered( $c::iti_handles(), 'style' ), $c::registered( $c::admin_handles(), 'style' ) );
 
-		wp_register_script( $this->handle, plugin_dir_url( __FILE__ ) . "js/{$this->plugin_name}{$min}.js", array( 'jquery', $dep ), $this->version, true );
-		wp_register_style( $this->handle, plugin_dir_url( __FILE__ ) . "css/{$this->plugin_name}{$min}.css", array( $dep ), $this->version, 'all' );
+		wp_register_script( $this->handle, plugin_dir_url( __FILE__ ) . "js/{$this->plugin_name}{$min}.js", array_unique( $script_deps ), $this->version, true );
+		wp_register_style( $this->handle, plugin_dir_url( __FILE__ ) . "css/{$this->plugin_name}{$min}.css", array_unique( $style_deps ), $this->version, 'all' );
 
 		wp_localize_script(
 			$this->handle,

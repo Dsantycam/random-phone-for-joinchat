@@ -2,8 +2,8 @@
 /**
  * Plugin Name: Random Phone for Joinchat
  * Plugin URI:  https://github.com/Dsantycam/random-phone-for-joinchat
- * Description: Reparte los contactos de <strong>Joinchat</strong> entre una lista de teléfonos/agentes. Reparto <strong>global y equitativo</strong> entre visitantes (shuffle-bag) con asignación <strong>fija por visitante</strong> (sticky). Compatible con Joinchat 6.x.
- * Version:     4.3.0
+ * Description: Reparte los contactos de <strong>Joinchat</strong> entre una lista de teléfonos/agentes. Reparto <strong>global y equitativo</strong> entre visitantes (shuffle-bag) con asignación <strong>fija por visitante</strong> (sticky). Compatible con Joinchat 3.x (WAme) hasta 6.x.
+ * Version:     4.5.0
  * Author:      Santiago Camacho
  * Author URI:  https://santiagocamachomkt.com
  * License:     GPLv3
@@ -19,7 +19,7 @@
 
 defined( 'WPINC' ) || exit;
 
-define( 'JOINCHAT_RANDOM_PHONE_VERSION', '4.3.0' );
+define( 'JOINCHAT_RANDOM_PHONE_VERSION', '4.5.0' );
 define( 'JOINCHAT_RANDOM_PHONE_FILE', __FILE__ );
 
 /**
@@ -42,8 +42,20 @@ define( 'JOINCHAT_RANDOM_PHONE_GITHUB', 'https://github.com/Dsantycam/random-pho
 define( 'JOINCHAT_RANDOM_PHONE_OLD', 'joinchat-random-phone/joinchat-random-phone.php' );
 
 add_action( 'plugins_loaded', 'joinchat_random_phone_load_plugin' );
+register_activation_hook( __FILE__, 'joinchat_random_phone_activate' );
 add_action( 'admin_notices', 'joinchat_random_phone_conflict_notice' );
 add_action( 'admin_post_jcrp_deactivate_old', 'joinchat_random_phone_deactivate_old' );
+
+/**
+ * Create the statistics table on activation (updates create it on first use).
+ *
+ * @since    4.5.0
+ * @return   void
+ */
+function joinchat_random_phone_activate() {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-joinchat-random-phone-stats.php';
+	JoinChatRandomPhoneStats::install();
+}
 
 /**
  * Is the original Creame Random Phone addon active?
@@ -124,8 +136,10 @@ function joinchat_random_phone_deactivate_old() {
  */
 function joinchat_random_phone_load_plugin() {
 
-	$plugin_name  = 'joinchat-random-phone';
-	$joinchat_min = '6.0.0';
+	$plugin_name = 'joinchat-random-phone';
+
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-joinchat-random-phone-compat.php';
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-joinchat-random-phone-stats.php';
 
 	if ( is_admin() ) {
 		// Load plugin translations (only needed for admin).
@@ -135,15 +149,13 @@ function joinchat_random_phone_load_plugin() {
 		joinchat_random_phone_init_updater();
 	}
 
-	if ( defined( 'WHATSAPPME_VERSION' ) ) {
-
-		add_action( 'admin_notices', 'joinchat_random_phone_wame_to_joinchat' );
-
-	} elseif ( ! defined( 'JOINCHAT_VERSION' ) ) {
+	// Works with every Joinchat from 3.0 ("WAme") to 6.x: the prefixes, handles
+	// and APIs that changed between them are resolved by the Compat class.
+	if ( ! JoinChatRandomPhoneCompat::installed() ) {
 
 		add_action( 'admin_notices', 'joinchat_random_phone_joinchat_required' );
 
-	} elseif ( version_compare( JOINCHAT_VERSION, $joinchat_min, '<' ) ) {
+	} elseif ( ! JoinChatRandomPhoneCompat::supported() ) {
 
 		add_action( 'admin_notices', 'joinchat_random_phone_joinchat_out_of_date' );
 
@@ -151,10 +163,13 @@ function joinchat_random_phone_load_plugin() {
 
 		require plugin_dir_path( __FILE__ ) . 'admin/class-joinchat-random-phone-admin.php';
 		require plugin_dir_path( __FILE__ ) . 'public/class-joinchat-random-phone-public.php';
-		require plugin_dir_path( __FILE__ ) . 'includes/class-joinchat-random-phone-roles.php';
 
-		// Let the admin choose which roles can manage Joinchat.
-		new JoinChatRandomPhoneRoles();
+		// Let the admin choose which roles can manage Joinchat. Needs the
+		// 'joinchat_capability' filter, which exists since Joinchat 4.2.
+		if ( JoinChatRandomPhoneCompat::has_capability_filter() ) {
+			require plugin_dir_path( __FILE__ ) . 'includes/class-joinchat-random-phone-roles.php';
+			new JoinChatRandomPhoneRoles();
+		}
 
 		if ( is_admin() ) {
 			new JoinChatRandomPhoneAdmin( $plugin_name, JOINCHAT_RANDOM_PHONE_VERSION );
@@ -162,7 +177,13 @@ function joinchat_random_phone_load_plugin() {
 
 		// Public class also loads in admin context because the AJAX endpoint
 		// (admin-ajax.php) runs with is_admin() === true.
-		new JoinChatRandomPhonePublic( $plugin_name, JOINCHAT_RANDOM_PHONE_VERSION );
+		$public = new JoinChatRandomPhonePublic( $plugin_name, JOINCHAT_RANDOM_PHONE_VERSION );
+
+		// Contact split panel (read only, never touches the split itself).
+		if ( is_admin() ) {
+			require plugin_dir_path( __FILE__ ) . 'admin/class-joinchat-random-phone-dashboard.php';
+			new JoinChatRandomPhoneDashboard( $public, JOINCHAT_RANDOM_PHONE_VERSION );
+		}
 
 		// Disable Joinchat Gutenberg sidebar (same as original addon).
 		add_filter( 'joinchat_gutenberg_sidebar', '__return_false' );
@@ -231,31 +252,11 @@ function joinchat_random_phone_joinchat_out_of_date() {
 		return;
 	}
 
-	$file_path    = 'creame-whatsapp-me/joinchat.php';
+	$file_path    = JoinChatRandomPhoneCompat::is_wame() ? 'creame-whatsapp-me/whatsappme.php' : 'creame-whatsapp-me/joinchat.php';
 	$upgrade_link = wp_nonce_url( self_admin_url( 'update.php?action=upgrade-plugin&plugin=' ) . $file_path, 'upgrade-plugin_' . $file_path );
 
 	echo '<div class="error"><p>' .
 		wp_kses_post( __( '<strong>Joinchat Random Phone</strong> require a newer version of <strong>Joinchat</strong>.', 'joinchat-random-phone' ) ) .
-		sprintf( ' <a href="%s">%s</a>', esc_url( $upgrade_link ), esc_html__( 'Update now', 'joinchat-random-phone' ) ) .
-		'</p></div>';
-}
-
-/**
- * WAme to Joinchat outdated admin notice.
- *
- * @since    4.0.0
- * @return   void
- */
-function joinchat_random_phone_wame_to_joinchat() {
-	if ( ! current_user_can( 'update_plugins' ) ) {
-		return;
-	}
-
-	$file_path    = 'creame-whatsapp-me/whatsappme.php';
-	$upgrade_link = wp_nonce_url( self_admin_url( 'update.php?action=upgrade-plugin&plugin=' ) . $file_path, 'upgrade-plugin_' . $file_path );
-
-	echo '<div class="error"><p>' .
-		wp_kses_post( __( '<strong>Joinchat Random Phone</strong> require to update WAme to the new <strong>Joinchat</strong>.', 'joinchat-random-phone' ) ) .
 		sprintf( ' <a href="%s">%s</a>', esc_url( $upgrade_link ), esc_html__( 'Update now', 'joinchat-random-phone' ) ) .
 		'</p></div>';
 }

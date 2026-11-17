@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Random Phone for Joinchat 4.2.1\n"
+"Project-Id-Version: Random Phone for Joinchat 4.5.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Dsantycam/random-phone-for-joinchat/issues\n"
 "POT-Creation-Date: 2026-08-23 00:00+0000\n"
 "PO-Revision-Date: 2026-08-23 00:00+0000\n"
@@ -121,3 +121,261 @@ msgstr "Permisos de Joinchat"
 
 msgid "Choose which roles, besides administrators, can view and change the Joinchat settings."
 msgstr "Elige qué roles, además de los administradores, pueden ver y cambiar los ajustes de Joinchat."
+
+#. Panel de reparto de contactos (4.5.0).
+
+msgid "Contact split"
+msgstr "Reparto de contactos"
+
+msgid "Joinchat contact split"
+msgstr "Reparto de Joinchat"
+
+msgid "Settings"
+msgstr "Ajustes"
+
+msgid "Stats"
+msgstr "Estadísticas"
+
+msgid "Sorry, you are not allowed to access this page."
+msgstr "No tienes permiso para acceder a esta página."
+
+msgid "Date"
+msgstr "Fecha"
+
+msgid "Phone"
+msgstr "Teléfono"
+
+msgid "Visitors assigned"
+msgstr "Visitantes asignados"
+
+msgid "WhatsApp opens"
+msgstr "Aperturas de WhatsApp"
+
+msgid "Visitors who reached out"
+msgstr "Visitantes que contactaron"
+
+msgid "Opens from mobile"
+msgstr "Aperturas desde móvil"
+
+msgid "Assigned by the browser (backup)"
+msgstr "Asignados por el navegador (respaldo)"
+
+msgid "no previous data"
+msgstr "sin datos previos"
+
+msgid "Previous period: %s"
+msgstr "Periodo anterior: %s"
+
+msgid "vs. previous period"
+msgstr "vs. periodo anterior"
+
+msgid "Today"
+msgstr "Hoy"
+
+msgid "7 days"
+msgstr "7 días"
+
+msgid "30 days"
+msgstr "30 días"
+
+msgid "90 days"
+msgstr "90 días"
+
+msgid "12 months"
+msgstr "12 meses"
+
+msgid "Data since %s"
+msgstr "Datos desde el %s"
+
+msgid "Period"
+msgstr "Periodo"
+
+msgid "Custom"
+msgstr "Personalizado"
+
+msgid "Export CSV"
+msgstr "Exportar CSV"
+
+msgid "From"
+msgstr "Desde"
+
+msgid "To"
+msgstr "Hasta"
+
+msgid "Apply"
+msgstr "Aplicar"
+
+msgid "Statistics deleted. The phone list and the current round were not touched."
+msgstr "Estadísticas borradas. La lista de teléfonos y la ronda actual no se han tocado."
+
+msgid "Statistics are switched off on this site (joinchat_random_phone_stats filter). The split keeps working as usual."
+msgstr "Las estadísticas están desactivadas en este sitio (filtro joinchat_random_phone_stats). El reparto funciona igual que siempre."
+
+msgid "The statistics table could not be created (the database user may lack the CREATE permission). The split keeps working as usual; it will be tried again in an hour."
+msgstr "No se pudo crear la tabla de estadísticas (puede que el usuario de la base de datos no tenga permiso CREATE). El reparto funciona igual que siempre; se volverá a intentar en una hora."
+
+msgid "There is only one phone in the Joinchat settings, so there is nothing to split. Add more phones to start sharing the contacts."
+msgstr "Solo hay un teléfono en los ajustes de Joinchat, así que no hay nada que repartir. Añade más teléfonos para empezar a repartir los contactos."
+
+msgid "The server did not answer for %s of the visitors who reached out."
+msgstr "El servidor no respondió para el %s de los visitantes que contactaron."
+
+msgid "They still got a random phone of the list, but the split is less even. A cache, firewall or security plugin blocking admin-ajax.php is the usual cause."
+msgstr "Igualmente recibieron un teléfono al azar de la lista, pero el reparto queda menos equilibrado. La causa habitual es una caché, un cortafuegos o un plugin de seguridad que bloquea admin-ajax.php."
+
+msgid "New visitors who got a phone. A returning visitor keeps theirs and is not counted again."
+msgstr "Visitantes nuevos que recibieron un teléfono. Quien vuelve conserva el suyo y no se cuenta otra vez."
+
+msgid "Times WhatsApp was opened towards one of the phones of the list."
+msgstr "Veces que se abrió WhatsApp hacia alguno de los teléfonos de la lista."
+
+msgid "Contact rate"
+msgstr "Tasa de contacto"
+
+msgid "%1$s of %2$s"
+msgstr "%1$s de %2$s"
+
+msgid "Assigned visitors who went on to open WhatsApp. Whether they actually sent the message happens inside WhatsApp and cannot be known."
+msgstr "Visitantes asignados que llegaron a abrir WhatsApp. Si de verdad enviaron el mensaje ocurre dentro de WhatsApp y no se puede saber."
+
+msgid "Waiting for visitors"
+msgstr "Esperando visitantes"
+
+msgid "Exact split"
+msgstr "Reparto exacto"
+
+msgid "Even split"
+msgstr "Reparto equilibrado"
+
+msgid "Uneven split"
+msgstr "Reparto desigual"
+
+msgid "Balance"
+msgstr "Equilibrio"
+
+msgid "Biggest difference, in visitors, between what a phone received and what its slots entitle it to. Editing the list during the period can widen it."
+msgstr "Mayor diferencia, en visitantes, entre lo que recibió un teléfono y lo que le corresponde por sus cupos. Si editas la lista durante el periodo puede aumentar."
+
+msgid "Daily activity"
+msgstr "Actividad diaria"
+
+msgid "Choose a period of two days or more to see the daily evolution."
+msgstr "Elige un periodo de dos días o más para ver la evolución diaria."
+
+msgid "No activity in this period yet. Every new visitor who reaches for WhatsApp will show up here."
+msgstr "Todavía no hay actividad en este periodo. Cada visitante nuevo que vaya a escribir por WhatsApp aparecerá aquí."
+
+msgid "Visitors assigned and WhatsApp opens per day"
+msgstr "Visitantes asignados y aperturas de WhatsApp por día"
+
+msgid "Only daily totals per phone are stored: nothing about the visitors (no IP, no phone number, no cookies). Data older than 13 months is deleted automatically."
+msgstr "Solo se guardan totales diarios por teléfono, nada sobre los visitantes (ni IP, ni número, ni cookies). Los datos de más de 13 meses se borran solos."
+
+msgid "Delete all the statistics? The phone list and the split are not affected. This cannot be undone."
+msgstr "¿Borrar todas las estadísticas? La lista de teléfonos y el reparto no se ven afectados. No se puede deshacer."
+
+msgid "Delete statistics"
+msgstr "Borrar estadísticas"
+
+msgid "Split by phone"
+msgstr "Reparto por teléfono"
+
+msgid "%s slots per round"
+msgstr "%s cupos por ronda"
+
+msgid "No phones yet."
+msgstr "Todavía no hay teléfonos."
+
+msgid "Assigned"
+msgstr "Asignados"
+
+msgid "Share of the split"
+msgstr "Parte del reparto"
+
+msgid "Difference"
+msgstr "Diferencia"
+
+msgid "Opens"
+msgstr "Aperturas"
+
+msgid "Mobile"
+msgstr "Móvil"
+
+msgid "Not in the list"
+msgstr "Ya no está en la lista"
+
+msgid "No contacts"
+msgstr "Sin contactos"
+
+msgid "Received %1$s · expected %2$s"
+msgstr "Recibió %1$s · le corresponde %2$s"
+
+msgid "Received %s"
+msgstr "Recibió %s"
+
+msgid "The line on each bar is the share its slots entitle it to."
+msgstr "La línea de cada barra marca la parte que le corresponde por sus cupos."
+
+msgid "Current round"
+msgstr "Ronda actual"
+
+msgid "Add two or more phones to start the rounds."
+msgstr "Añade dos o más teléfonos para empezar las rondas."
+
+msgid "%1$s of %2$s slots handed out"
+msgstr "%1$s de %2$s cupos entregados"
+
+msgid "A new round starts with the next visitor"
+msgstr "La próxima ronda empieza con el siguiente visitante"
+
+msgid "Every phone gets its turn before any of them repeats. Still to come in this round:"
+msgstr "Cada teléfono recibe su turno antes de que se repita ninguno. Faltan en esta ronda:"
+
+msgid "Floating button"
+msgstr "Botón flotante"
+
+msgid "Chat window button"
+msgstr "Botón de la ventana de chat"
+
+msgid "Buttons and links in the page"
+msgstr "Botones y enlaces de la página"
+
+msgid "Opened automatically"
+msgstr "Apertura automática"
+
+msgid "Not reported"
+msgstr "Sin dato"
+
+msgid "How they reach out"
+msgstr "Cómo contactan"
+
+msgid "No WhatsApp opens in this period."
+msgstr "No se ha abierto WhatsApp en este periodo."
+
+msgid "Device"
+msgstr "Dispositivo"
+
+msgid "Mobile %1$s, computer %2$s"
+msgstr "Móvil %1$s, escritorio %2$s"
+
+msgid "Computer"
+msgstr "Escritorio"
+
+msgid "Opened from"
+msgstr "Desde dónde"
+
+msgid "Pages with most contacts"
+msgstr "Páginas con más contactos"
+
+msgid "Home page"
+msgstr "Página de inicio"
+
+msgid "%1$s phone in the list"
+msgid_plural "%1$s phones in the list"
+msgstr[0] "%1$s teléfono en la lista"
+msgstr[1] "%1$s teléfonos en la lista"
+
+msgid "%s slot"
+msgid_plural "%s slots"
+msgstr[0] "%s cupo"
+msgstr[1] "%s cupos"

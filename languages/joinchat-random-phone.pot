@@ -115,3 +115,261 @@ msgstr ""
 #. Cadena antigua, conservada por compatibilidad.
 msgid "Add phone number"
 msgstr ""
+
+#. Panel de reparto de contactos (4.5.0).
+
+msgid "Contact split"
+msgstr ""
+
+msgid "Joinchat contact split"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Stats"
+msgstr ""
+
+msgid "Sorry, you are not allowed to access this page."
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Phone"
+msgstr ""
+
+msgid "Visitors assigned"
+msgstr ""
+
+msgid "WhatsApp opens"
+msgstr ""
+
+msgid "Visitors who reached out"
+msgstr ""
+
+msgid "Opens from mobile"
+msgstr ""
+
+msgid "Assigned by the browser (backup)"
+msgstr ""
+
+msgid "no previous data"
+msgstr ""
+
+msgid "Previous period: %s"
+msgstr ""
+
+msgid "vs. previous period"
+msgstr ""
+
+msgid "Today"
+msgstr ""
+
+msgid "7 days"
+msgstr ""
+
+msgid "30 days"
+msgstr ""
+
+msgid "90 days"
+msgstr ""
+
+msgid "12 months"
+msgstr ""
+
+msgid "Data since %s"
+msgstr ""
+
+msgid "Period"
+msgstr ""
+
+msgid "Custom"
+msgstr ""
+
+msgid "Export CSV"
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+msgid "To"
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "Statistics deleted. The phone list and the current round were not touched."
+msgstr ""
+
+msgid "Statistics are switched off on this site (joinchat_random_phone_stats filter). The split keeps working as usual."
+msgstr ""
+
+msgid "The statistics table could not be created (the database user may lack the CREATE permission). The split keeps working as usual; it will be tried again in an hour."
+msgstr ""
+
+msgid "There is only one phone in the Joinchat settings, so there is nothing to split. Add more phones to start sharing the contacts."
+msgstr ""
+
+msgid "The server did not answer for %s of the visitors who reached out."
+msgstr ""
+
+msgid "They still got a random phone of the list, but the split is less even. A cache, firewall or security plugin blocking admin-ajax.php is the usual cause."
+msgstr ""
+
+msgid "New visitors who got a phone. A returning visitor keeps theirs and is not counted again."
+msgstr ""
+
+msgid "Times WhatsApp was opened towards one of the phones of the list."
+msgstr ""
+
+msgid "Contact rate"
+msgstr ""
+
+msgid "%1$s of %2$s"
+msgstr ""
+
+msgid "Assigned visitors who went on to open WhatsApp. Whether they actually sent the message happens inside WhatsApp and cannot be known."
+msgstr ""
+
+msgid "Waiting for visitors"
+msgstr ""
+
+msgid "Exact split"
+msgstr ""
+
+msgid "Even split"
+msgstr ""
+
+msgid "Uneven split"
+msgstr ""
+
+msgid "Balance"
+msgstr ""
+
+msgid "Biggest difference, in visitors, between what a phone received and what its slots entitle it to. Editing the list during the period can widen it."
+msgstr ""
+
+msgid "Daily activity"
+msgstr ""
+
+msgid "Choose a period of two days or more to see the daily evolution."
+msgstr ""
+
+msgid "No activity in this period yet. Every new visitor who reaches for WhatsApp will show up here."
+msgstr ""
+
+msgid "Visitors assigned and WhatsApp opens per day"
+msgstr ""
+
+msgid "Only daily totals per phone are stored: nothing about the visitors (no IP, no phone number, no cookies). Data older than 13 months is deleted automatically."
+msgstr ""
+
+msgid "Delete all the statistics? The phone list and the split are not affected. This cannot be undone."
+msgstr ""
+
+msgid "Delete statistics"
+msgstr ""
+
+msgid "Split by phone"
+msgstr ""
+
+msgid "%s slots per round"
+msgstr ""
+
+msgid "No phones yet."
+msgstr ""
+
+msgid "Assigned"
+msgstr ""
+
+msgid "Share of the split"
+msgstr ""
+
+msgid "Difference"
+msgstr ""
+
+msgid "Opens"
+msgstr ""
+
+msgid "Mobile"
+msgstr ""
+
+msgid "Not in the list"
+msgstr ""
+
+msgid "No contacts"
+msgstr ""
+
+msgid "Received %1$s · expected %2$s"
+msgstr ""
+
+msgid "Received %s"
+msgstr ""
+
+msgid "The line on each bar is the share its slots entitle it to."
+msgstr ""
+
+msgid "Current round"
+msgstr ""
+
+msgid "Add two or more phones to start the rounds."
+msgstr ""
+
+msgid "%1$s of %2$s slots handed out"
+msgstr ""
+
+msgid "A new round starts with the next visitor"
+msgstr ""
+
+msgid "Every phone gets its turn before any of them repeats. Still to come in this round:"
+msgstr ""
+
+msgid "Floating button"
+msgstr ""
+
+msgid "Chat window button"
+msgstr ""
+
+msgid "Buttons and links in the page"
+msgstr ""
+
+msgid "Opened automatically"
+msgstr ""
+
+msgid "Not reported"
+msgstr ""
+
+msgid "How they reach out"
+msgstr ""
+
+msgid "No WhatsApp opens in this period."
+msgstr ""
+
+msgid "Device"
+msgstr ""
+
+msgid "Mobile %1$s, computer %2$s"
+msgstr ""
+
+msgid "Computer"
+msgstr ""
+
+msgid "Opened from"
+msgstr ""
+
+msgid "Pages with most contacts"
+msgstr ""
+
+msgid "Home page"
+msgstr ""
+
+msgid "%1$s phone in the list"
+msgid_plural "%1$s phones in the list"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "%s slot"
+msgid_plural "%s slots"
+msgstr[0] ""
+msgstr[1] ""
